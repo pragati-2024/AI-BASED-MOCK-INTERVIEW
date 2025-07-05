@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Our Team</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --dark-bg: #121212;
+            --darker-bg: #0a0a0a;
+            --primary: #bb86fc;
+            --primary-variant: #3700b3;
+            --secondary: #03dac6;
+            --text: #e1e1e1;
+            --text-secondary: #a1a1a1;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background-color: var(--darker-bg);
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            position: relative;
+            animation: headerSlideDown 0.8s ease-out;
+        }
+        
+        @keyframes headerSlideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .back-home {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .back-home a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: 1px solid var(--primary);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .back-home a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(187, 134, 252, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .back-home a:hover {
+            background-color: var(--primary);
+            color: var(--dark-bg);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 5px 15px rgba(187, 134, 252, 0.4);
+        }
+        
+        .back-home a:hover::before {
+            left: 100%;
+        }
+        
+        .back-home i {
+            margin-right: 5px;
+            transition: transform 0.3s;
+        }
+        
+        .back-home a:hover i {
+            transform: translateX(-3px);
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+            text-shadow: 0 0 10px rgba(187, 134, 252, 0.3);
+            animation: glow 2s infinite alternate;
+        }
+        
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 5px rgba(187, 134, 252, 0.3);
+            }
+            to {
+                text-shadow: 0 0 15px rgba(187, 134, 252, 0.6);
+            }
+        }
+        
+        main {
+            padding: 40px 0;
+            animation: fadeIn 1s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        h1 {
+            font-size: 36px;
+            margin-bottom: 30px;
+            color: var(--primary);
+            text-align: center;
+            position: relative;
+            animation: titleEntrance 1s ease-out;
+        }
+        
+        @keyframes titleEntrance {
+            from {
+                transform: translateY(-30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 3px;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            border-radius: 3px;
+            animation: lineExpand 1s ease-out;
+        }
+        
+        @keyframes lineExpand {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100px;
+            }
+        }
+        
+        p {
+            margin-bottom: 15px;
+            color: var(--text-secondary);
+            text-align: center;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Team Grid */
+        .team-container {
+            margin-top: 60px;
+            position: relative;
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .team-member {
+            background: rgba(30, 30, 30, 0.7);
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            padding: 30px;
+            text-align: center;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(5px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: cardEntrance 0.8s ease-out forwards;
+        }
+        
+        .team-grid .team-member:nth-child(1) { animation-delay: 0.4s; }
+        .team-grid .team-member:nth-child(2) { animation-delay: 0.6s; }
+        .team-grid .team-member:nth-child(3) { animation-delay: 0.8s; }
+        .team-grid .team-member:nth-child(4) { animation-delay: 1s; }
+        
+        @keyframes cardEntrance {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .team-member-single {
+            grid-column: 1 / -1;
+            margin: 0 auto;
+            width: 50%;
+            animation: cardEntrance 0.8s ease-out 1.2s forwards;
+        }
+        
+        .team-member:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5), 0 0 30px rgba(187, 134, 252, 0.2);
+            border: 1px solid var(--primary);
+            z-index: 2;
+        }
+        
+        .team-member::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 15px;
+            background: radial-gradient(circle at center, transparent, rgba(187, 134, 252, 0.1));
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        
+        .team-member:hover::after {
+            opacity: 1;
+        }
+        
+        .team-member img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 3px solid var(--primary);
+            box-shadow: 0 0 20px rgba(187, 134, 252, 0.3);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            filter: grayscale(20%);
+        }
+        
+        .team-member:hover img {
+            box-shadow: 0 0 30px rgba(187, 134, 252, 0.5);
+            transform: rotate(10deg) scale(1.1);
+            filter: grayscale(0%);
+        }
+        
+        .team-member h3 {
+            margin: 15px 0 5px;
+            color: var(--text);
+            font-size: 22px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .team-member h3::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--secondary);
+            transition: width 0.3s ease;
+        }
+        
+        .team-member:hover h3::after {
+            width: 100%;
+        }
+        
+        .team-member .position {
+            color: var(--primary);
+            font-weight: 500;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .team-member .description {
+            font-size: 14px;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+        
+        .social-links {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .social-links a {
+            color: var(--text-secondary);
+            font-size: 20px;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .social-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(187, 134, 252, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .social-links a:hover {
+            color: var(--primary);
+            background: rgba(187, 134, 252, 0.1);
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 5px 15px rgba(187, 134, 252, 0.3);
+        }
+        
+        .social-links a:hover::before {
+            left: 100%;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .team-member-single {
+                width: 100%;
+            }
+            
+            h1 {
+                font-size: 28px;
+            }
+            
+            .back-home a {
+                padding: 6px 10px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">Mockneto</div>
+            <div class="back-home">
+                <a href="Minterview.html"><i class="fas fa-arrow-left"></i> Back to Home</a>
+            </div>
+        </div>
+    </header>
+    
+    <main class="container">
+        <h1>About Our Team</h1>
+        <p>We're a group of college students turning ideas into a real website. With a mix of skills and creativity, we’re building something cool, practical, and made with passion.</p>
+        
+        <div class="team-container">
+            <div class="team-grid">
+                <div class="team-member">
+                    <img src="amit.png" alt="Amit Kumar">
+                    <h3>Amit Kumar</h3>
+                    <p class="position">Lead Developer</p>
+                    <p class="description">Third-year B.Tech student who loves building cool, user-friendly websites and exploring new tech every day.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div class="team-member">
+                    <img src="#" alt="Enter Your name">
+                    <h3>Enter Your name</h3>
+                    <p class="position">Lead Developer</p>
+                    <p class="description">Enter about yourself</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div class="team-member">
+                    <img src="#" alt="Enter Your name">
+                    <h3>Enter Your name</h3>
+                    <p class="position">Lead Developer</p>
+                    <p class="description">Enter about yourself</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div class="team-member">
+                    <img src="#" alt="Enter Your name">
+                    <h3>Enter Your name</h3>
+                    <p class="position">Lead Developer</p>
+                    <p class="description">Enter about yourself</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="team-member team-member-single">
+                <img src="#" alt="Enter Your name">
+                <h3>Enter Your name</h3>
+                <p class="position">Lead Developer</p>
+                <p class="description">Enter about yourself</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
