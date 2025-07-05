@@ -6,33 +6,34 @@
 }
 
 body {
-  background-color: #f6f9fc;
-  color: #1f2937;
+  background-color: #0f0f0f;
+  color: #e5e7eb;
   padding: 40px;
 }
 
 .hero {
   text-align: center;
   margin-bottom: 60px;
-  background: linear-gradient(to right, #fdfcfb, #e2d1c3);
+  background: linear-gradient(to right, #1c1c1c, #2a1a3c);
   padding: 60px 20px;
   border-radius: 20px;
+  box-shadow: 0 0 20px rgba(124, 58, 237, 0.2);
 }
 
 .hero h1 {
   font-size: 3rem;
   font-weight: 700;
-  color: #1f2937;
+  color: #ffffff;
 }
 
 .brand {
-  color: #7c3aed;
+  color: #a78bfa;
 }
 
 .hero p {
   font-size: 1.2rem;
   margin-top: 15px;
-  color: #374151;
+  color: #cbd5e1;
 }
 
 .hero-buttons {
@@ -51,21 +52,23 @@ body {
 }
 
 .btn-primary {
-  background-color: #7c3aed;
-  color: white;
+  background-color: #a78bfa;
+  color: #0f0f0f;
+  font-weight: 600;
 }
 
 .btn-primary:hover {
-  background-color: #6d28d9;
+  background-color: #c084fc;
 }
 
 .btn-secondary {
-  background-color: #14b8a6;
-  color: white;
+  background-color: #34d399;
+  color: #0f0f0f;
+  font-weight: 600;
 }
 
 .btn-secondary:hover {
-  background-color: #0d9488;
+  background-color: #2dd4bf;
 }
 
 .features {
@@ -77,8 +80,8 @@ body {
 }
 
 .feature-box {
-  background-color: white;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+  background-color: #1a1a1a;
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.15);
   padding: 25px;
   width: 300px;
   border-radius: 16px;
@@ -92,18 +95,18 @@ body {
 
 .feature-box i {
   font-size: 2rem;
-  color: #14b8a6;
+  color: #34d399;
   margin-bottom: 10px;
 }
 
 .feature-box h3 {
   font-size: 1.25rem;
   margin-bottom: 8px;
-  color: #1f2937;
+  color: #f3f4f6;
 }
 
 .feature-box p {
-  color: #6b7280;
+  color: #9ca3af;
   font-size: 0.95rem;
 }
 
@@ -111,17 +114,15 @@ body {
   text-align: center;
   margin-top: 60px;
   padding: 40px 20px;
-  background-color: #eef2ff;
+  background-color: #18181b;
   border-radius: 12px;
-  font-family: 'Inter', sans-serif;
 }
 
 .how-it-works h2 {
   font-size: 2rem;
   margin-bottom: 20px;
-  color: #4f46e5;
+  color: #a78bfa;
   font-weight: 700;
-  font-family: 'Ubuntu', sans-serif;
 }
 
 .how-it-works ol {
@@ -129,34 +130,29 @@ body {
   max-width: 600px;
   margin: auto;
   font-size: 1.05rem;
-  color: #475569;
+  color: #d1d5db;
   line-height: 1.8;
-  font-weight: 400;
-  font-family: 'Inter', sans-serif;
 }
-
 .final-cta {
-  background: linear-gradient(135deg, #7c3aed 0%, #14b8a6 100%);
+  background: linear-gradient(135deg, #a78bfa 0%, #1e3a3a 100%);
   text-align: center;
   padding: 50px;
   margin-top: 60px;
   border-radius: 16px;
-  color: white;
+  color: #f3f4f6;
 }
 
 .final-cta h2 {
   font-size: 2rem;
   margin-bottom: 15px;
 }
-
 .final-cta p {
   font-size: 1.1rem;
   margin-bottom: 25px;
 }
-
 .cta-btn {
-  background-color: white;
-  color: #7c3aed;
+  background-color: #0f0f0f;
+  color: #a78bfa;
   padding: 14px 28px;
   border: none;
   border-radius: 12px;
@@ -169,12 +165,43 @@ body {
   font-weight: 600;
   transition: background 0.3s ease;
 }
-
 .cta-btn:hover {
-  background-color: #f3e8ff;
+  background-color: #27272a;
 }
-
 .btn-icon {
   height: 22px;
   width: 22px;
 }
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #0a0a0a;
+  padding: 20px 30px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+  box-shadow: 0 0 10px rgba(167, 139, 250, 0.3);
+}
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #a78bfa;
+  text-shadow: 0 0 10px rgba(167, 139, 250, 0.8);
+}
+.back-home-btn {
+  text-decoration: none;
+  color: #a78bfa;
+  border: 1px solid #a78bfa;
+  padding: 10px 16px;
+  border-radius: 8px;
+  transition: background 0.3s ease, color 0.3s ease;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.back-home-btn:hover {
+  background-color: #a78bfa;
+  color: #0f0f0f;
+}
+
