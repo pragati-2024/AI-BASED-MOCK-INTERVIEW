@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | Mocknet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --darker-bg: #0a0a0a;
+            --card-bg: #1e293b;
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+            --primary-blue: #60a5fa;
+            --primary-purple: #a78bfa;
+            --accent: #7c3aed;
+            --border: #334155;
+            --secondary: #34d399;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: var(--bg-dark);
+            color: var(--text-light);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            padding: 2rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .project-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary-blue), var(--primary-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .back-home:hover {
+            background: rgba(96, 165, 250, 0.1);
+            transform: translateX(-5px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes gradientPulse {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .content-wrapper {
+            animation: fadeIn 1s ease-out 0.3s both;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: slideUp 0.8s ease-out 0.4s both;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-blue), var(--primary-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+        }
+
+        header p {
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .contact-card {
+            animation: slideUp 0.8s ease-out var(--delay) both;
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.1) 0%, rgba(167, 139, 250, 0.1) 100%);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .contact-card:hover::before {
+            opacity: 1;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        .contact-card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            color: var(--text-light);
+        }
+
+        .contact-card h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--primary-purple));
+            border-radius: 3px;
+            animation: gradientPulse 3s ease infinite;
+            background-size: 200% auto;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .info-item::before {
+            content: '';
+            position: absolute;
+            left: -15px;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: var(--primary-purple);
+            border-radius: 3px;
+            transform: scaleY(0);
+            transform-origin: top;
+            transition: transform 0.3s ease;
+        }
+
+        .info-item:hover {
+            transform: translateX(10px);
+        }
+
+        .info-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .info-item i {
+            font-size: 1.2rem;
+            margin-right: 1rem;
+            margin-top: 3px;
+            color: var(--primary-purple);
+            min-width: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .info-item:hover i {
+            transform: scale(1.2);
+            color: var(--accent);
+        }
+
+        .info-item p {
+            color: var(--text-light);
+        }
+
+        .info-item a {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .info-item a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-purple);
+            transition: width 0.3s ease;
+        }
+
+        .info-item a:hover {
+            color: var(--primary-purple);
+        }
+
+        .info-item a:hover::after {
+            width: 100%;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            animation: fadeIn 0.8s ease-out var(--form-delay) both;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            background: #1e293b;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-purple);
+            box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.2);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, var(--primary-blue), var(--primary-purple));
+            color: white;
+            border: none;
+            padding: 0.8rem 1.8rem;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-size: 200% auto;
+            animation: fadeIn 0.8s ease-out 0.8s both, gradientPulse 4s ease infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+            pointer-events: none;
+        }
+
+        .submit-btn:hover::after {
+            left: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 5px 15px rgba(96, 165, 250, 0.3);
+            background-position: right center;
+        }
+
+
+        .project-tag {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(5px);
+            color: var(--primary-purple);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid var(--border);
+            animation: fadeIn 1s ease-out 1s both;
+            z-index: 100;
+        }
+        .footer {
+            background: linear-gradient(135deg, var(--darker-bg) 0%, #1a1a1a 100%);
+            padding: 60px 0 30px;
+            border-top: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary-purple), transparent);
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+        
+        .footer-section {
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .footer-section:nth-child(1) { animation-delay: 0.1s; animation-play-state: running; }
+        .footer-section:nth-child(2) { animation-delay: 0.2s; animation-play-state: running; }
+        .footer-section:nth-child(3) { animation-delay: 0.3s; animation-play-state: running; }
+        .footer-section:nth-child(4) { animation-delay: 0.4s; animation-play-state: running; }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .footer-section h3 {
+            color: var(--primary-purple);
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 30px;
+            height: 2px;
+            background: var(--primary-purple);
+            border-radius: 2px;
+        }
+        
+        .footer-section p {
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            line-height: 1.7;
+            font-weight: 300;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+            position: relative;
+            font-weight: 300;
+        }
+        
+        .footer-links a::before {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--primary-purple);
+            transition: width 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary-purple);
+            transform: translateX(5px);
+        }
+        
+        .footer-links a:hover::before {
+            width: 100%;
+        }
+        
+        .footer-social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .footer-social-links a {
+            color: var(--text-muted);
+            font-size: 20px;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(167, 139, 250, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .footer-social-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(167, 139, 250, 0.3), transparent);
+            transition: 0.5s;
+        }
+        
+        .footer-social-links a:hover {
+            color: var(--primary-purple);
+            background: rgba(167, 139, 250, 0.2);
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 5px 15px rgba(167, 139, 250, 0.3);
+        }
+        
+        .footer-social-links a:hover::before {
+            left: 100%;
+        }
+        
+        .newsletter-form {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .newsletter-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: rgba(167, 139, 250, 0.05);
+            color: var(--text-light);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .newsletter-input:focus {
+            outline: none;
+            border-color: var(--primary-purple);
+            box-shadow: 0 0 10px rgba(167, 139, 250, 0.2);
+        }
+        
+        .newsletter-btn {
+            padding: 12px 20px;
+            background: var(--primary-purple);
+            color: var(--darker-bg);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .newsletter-btn:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(167, 139, 250, 0.3);
+        }
+        
+        .footer-bottom {
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+        
+        .footer-bottom-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-purple);
+            text-shadow: 0 0 10px rgba(167, 139, 250, 0.3);
+        }
+        
+        .footer-bottom-links {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .footer-bottom-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-bottom-links a:hover {
+            color: var(--primary-purple);
+        }
+        
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+        
+        .contact-item i {
+            color: var(--primary-purple);
+            width: 16px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1.5rem;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .footer-bottom-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .newsletter-form {
+                flex-direction: column;
+            }
+            
+            .footer-social-links {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <div class="page-header">
+            <div class="project-name">Mocknet</div>
+            <a href="Minterview.html" class="back-home">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+        </div>
+
+        <div class="content-wrapper">
+            <header>
+                <h1>Contact Our Team</h1>
+                <p>We're computer science students working on Project Aurora. Reach out with questions or collaboration ideas!</p>
+            </header>
+
+            <main class="contact-grid">
+                <section class="contact-card" style="--delay: 0.5s">
+                    <h2>Contact Info</h2>
+                    <div class="info-item">
+                        <i class="fas fa-user-graduate"></i>
+                        <p><strong>Team:</strong> Mocknet Developers</p>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-envelope"></i>
+                        <p><strong>Email:</strong> <a href="mailto:mocknet@university.edu">mocknet@university.edu</a></p>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-building-columns"></i>
+                        <p><strong>Department:</strong> Computer Science</p>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-map-marked-alt"></i>
+                        <p><strong>Campus Location:</strong> LPU , GLA</p>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-clock"></i>
+                        <p><strong>Hours:</strong> Mon-Fri, 10AM-6PM</p>
+                    </div>
+                </section>
+
+                <section class="contact-card" style="--delay: 0.7s">
+                    <h2>Send a Message</h2>
+                    <form action="#" method="POST">
+                        <div class="form-group" style="--form-delay: 0.8s">
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" name="name" placeholder="Your name" required>
+                        </div>
+                        <div class="form-group" style="--form-delay: 0.9s">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="your.email@university.edu" required>
+                        </div>
+                        <div class="form-group" style="--form-delay: 1.0s">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" name="subject" placeholder="Project inquiry">
+                        </div>
+                        <div class="form-group" style="--form-delay: 1.1s">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" rows="5" placeholder="Your message..." required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-paper-plane"></i> Send Message
+                        </button>
+                    </form>
+                </section>
+            </main>
+        </div>
+
+        <div class="project-tag">
+            <i class="fas fa-code"></i> Student Project
+        </div>
+    </div>
+
+    <!-- Footer Component -->
+    <footer class="footer">
+        <div class="footer-container">
+            <!-- Company Info -->
+            <div class="footer-section">
+                <h3>Mockneto</h3>
+                <p>Your personal AI coach to master real-world interviews with confidence. Transform your interview skills with our cutting-edge AI technology.</p>
+                <div class="footer-social-links">
+                    <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            
+            <!-- Quick Links -->
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="homepage.html">Home</a></li>
+                    <li><a href="Minterview.html">Practice Interview</a></li>
+                    <li><a href="#">Interview Tips</a></li>
+                    <li><a href="#">Mock Assignment</a></li>
+                    <li><a href="Aboutus.html">About Us</a></li>
+                    <li><a href="contactus.html">Contact</a></li>
+                </ul>
+            </div>
+            
+            <!-- Features -->
+            <div class="footer-section">
+                <h3>Features</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Real-Time Voice Practice</a></li>
+                    <li><a href="#">Smart Evaluation Engine</a></li>
+                    <li><a href="#">Progress Dashboard</a></li>
+                    <li><a href="#">Goal-Based Practice</a></li>
+                    <li><a href="#">AI Notes & Feedback</a></li>
+                    <li><a href="#">Domain Customization</a></li>
+                </ul>
+            </div>
+            
+            <!-- Newsletter & Contact -->
+            <div class="footer-section">
+                <h3>Stay Updated</h3>
+                <p>Subscribe to our newsletter for the latest interview tips and AI updates.</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Enter your email" class="newsletter-input" required>
+                    <button type="submit" class="newsletter-btn">Subscribe</button>
+                </form>
+                
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>support@mockneto.com</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>+1 (555) 123-4567</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Tech Hub, Innovation District</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <div class="footer-bottom-content">
+                <div class="footer-logo">Mockneto</div>
+                <div class="footer-bottom-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Cookie Policy</a>
+                    <a href="#">GDPR</a>
+                </div>
+                <div class="copyright">
+                    © 2025 Mockneto. All rights reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
