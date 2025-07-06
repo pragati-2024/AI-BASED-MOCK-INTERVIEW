@@ -7,13 +7,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --dark-bg: #121212;
-            --darker-bg: #0a0a0a;
-            --primary: #bb86fc;
-            --primary-variant: #3700b3;
-            --secondary: #03dac6;
-            --text: #e1e1e1;
-            --text-secondary: #a1a1a1;
+            --dark-bg: #1a2a3a;          
+            --darker-bg: #0e1a26;        
+            --primary: #6d9dc5;          
+            --primary-variant: #4a7ba6;  
+            --secondary: #a7c6da;        
+            --accent: #8fb3d9;           
+            --text: #f0f7ff;            
+            --text-secondary: #d4e4f1;  
         }
         
         * {
@@ -38,11 +39,12 @@
         }
         
         header {
-            background-color: var(--darker-bg);
+            background: linear-gradient(135deg, var(--darker-bg) 0%, var(--dark-bg) 100%);
             padding: 20px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.4);
             position: relative;
             animation: headerSlideDown 0.8s ease-out;
+            border-bottom: 1px solid rgba(109, 157, 197, 0.2);
         }
         
         @keyframes headerSlideDown {
@@ -75,6 +77,7 @@
             align-items: center;
             position: relative;
             overflow: hidden;
+            background: rgba(109, 157, 197, 0.1);
         }
         
         .back-home a::before {
@@ -84,15 +87,15 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(187, 134, 252, 0.2), transparent);
+            background: linear-gradient(90deg, transparent, rgba(109, 157, 197, 0.3), transparent);
             transition: 0.5s;
         }
         
         .back-home a:hover {
             background-color: var(--primary);
-            color: var(--dark-bg);
+            color: var(--darker-bg);
             transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 5px 15px rgba(187, 134, 252, 0.4);
+            box-shadow: 0 5px 20px rgba(109, 157, 197, 0.5);
         }
         
         .back-home a:hover::before {
@@ -112,16 +115,18 @@
             font-size: 24px;
             font-weight: bold;
             color: var(--primary);
-            text-shadow: 0 0 10px rgba(187, 134, 252, 0.3);
+            text-shadow: 0 0 10px rgba(109, 157, 197, 0.3);
             animation: glow 2s infinite alternate;
+            letter-spacing: 1px;
         }
         
         @keyframes glow {
             from {
-                text-shadow: 0 0 5px rgba(187, 134, 252, 0.3);
+                text-shadow: 0 0 5px rgba(109, 157, 197, 0.3);
             }
             to {
-                text-shadow: 0 0 15px rgba(187, 134, 252, 0.6);
+                text-shadow: 0 0 15px rgba(109, 157, 197, 0.6), 
+                            0 0 20px rgba(109, 157, 197, 0.3);
             }
         }
         
@@ -146,6 +151,8 @@
             text-align: center;
             position: relative;
             animation: titleEntrance 1s ease-out;
+            font-weight: 300;
+            letter-spacing: 1px;
         }
         
         @keyframes titleEntrance {
@@ -167,7 +174,7 @@
             bottom: -10px;
             left: 50%;
             transform: translateX(-50%);
-            background: var(--primary);
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
             border-radius: 3px;
             animation: lineExpand 1s ease-out;
         }
@@ -189,6 +196,8 @@
             margin-left: auto;
             margin-right: auto;
             animation: fadeInUp 1s ease-out 0.3s both;
+            font-weight: 300;
+            line-height: 1.8;
         }
         
         @keyframes fadeInUp {
@@ -215,27 +224,34 @@
             margin-bottom: 30px;
         }
         
+        .team-row {
+            display: contents;
+        }
+        
         .team-member {
-            background: rgba(30, 30, 30, 0.7);
+            background: rgba(26, 42, 58, 0.6);
             border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
             padding: 30px;
             text-align: center;
             transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(5px);
+            border: 1px solid rgba(109, 157, 197, 0.2);
+            backdrop-filter: blur(8px);
             display: flex;
             flex-direction: column;
             align-items: center;
             opacity: 0;
             transform: translateY(30px);
             animation: cardEntrance 0.8s ease-out forwards;
+            position: relative;
+            overflow: hidden;
         }
         
         .team-grid .team-member:nth-child(1) { animation-delay: 0.4s; }
         .team-grid .team-member:nth-child(2) { animation-delay: 0.6s; }
         .team-grid .team-member:nth-child(3) { animation-delay: 0.8s; }
         .team-grid .team-member:nth-child(4) { animation-delay: 1s; }
+        .team-member-single { animation-delay: 1.2s; }
         
         @keyframes cardEntrance {
             to {
@@ -248,30 +264,29 @@
             grid-column: 1 / -1;
             margin: 0 auto;
             width: 50%;
-            animation: cardEntrance 0.8s ease-out 1.2s forwards;
+            animation: cardEntrance 0.8s ease-out forwards;
         }
         
         .team-member:hover {
             transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.5), 0 0 30px rgba(187, 134, 252, 0.2);
-            border: 1px solid var(--primary);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4), 0 0 30px rgba(109, 157, 197, 0.3);
+            border: 1px solid var(--accent);
             z-index: 2;
         }
         
-        .team-member::after {
+        .team-member::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 15px;
-            background: radial-gradient(circle at center, transparent, rgba(187, 134, 252, 0.1));
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(109, 157, 197, 0.1) 0%, transparent 70%);
             opacity: 0;
             transition: opacity 0.5s;
         }
         
-        .team-member:hover::after {
+        .team-member:hover::before {
             opacity: 1;
         }
         
@@ -282,15 +297,16 @@
             object-fit: cover;
             margin-bottom: 20px;
             border: 3px solid var(--primary);
-            box-shadow: 0 0 20px rgba(187, 134, 252, 0.3);
+            box-shadow: 0 0 25px rgba(109, 157, 197, 0.4);
             transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            filter: grayscale(20%);
+            filter: grayscale(20%) brightness(1.05);
         }
         
         .team-member:hover img {
-            box-shadow: 0 0 30px rgba(187, 134, 252, 0.5);
-            transform: rotate(10deg) scale(1.1);
-            filter: grayscale(0%);
+            box-shadow: 0 0 35px rgba(109, 157, 197, 0.6);
+            transform: rotate(5deg) scale(1.1);
+            filter: grayscale(0%) brightness(1.1);
+            border-color: var(--accent);
         }
         
         .team-member h3 {
@@ -299,21 +315,23 @@
             font-size: 22px;
             position: relative;
             display: inline-block;
+            font-weight: 400;
         }
         
         .team-member h3::after {
             content: '';
             position: absolute;
             bottom: -5px;
-            left: 0;
+            left: 50%;
+            transform: translateX(-50%);
             width: 0;
             height: 2px;
-            background: var(--secondary);
+            background: var(--accent);
             transition: width 0.3s ease;
         }
         
         .team-member:hover h3::after {
-            width: 100%;
+            width: 80%;
         }
         
         .team-member .position {
@@ -321,12 +339,16 @@
             font-weight: 500;
             margin-bottom: 15px;
             font-size: 16px;
+            letter-spacing: 1px;
         }
         
         .team-member .description {
-            font-size: 14px;
+            font-size: 15px;
             margin-bottom: 20px;
             flex-grow: 1;
+            color: var(--text-secondary);
+            font-weight: 300;
+            line-height: 1.7;
         }
         
         .social-links {
@@ -346,7 +368,7 @@
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            background: rgba(255,255,255,0.05);
+            background: rgba(167, 198, 218, 0.1);
             position: relative;
             overflow: hidden;
         }
@@ -358,15 +380,15 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(187, 134, 252, 0.2), transparent);
+            background: linear-gradient(90deg, transparent, rgba(109, 157, 197, 0.3), transparent);
             transition: 0.5s;
         }
         
         .social-links a:hover {
             color: var(--primary);
-            background: rgba(187, 134, 252, 0.1);
+            background: rgba(109, 157, 197, 0.2);
             transform: translateY(-5px) scale(1.1);
-            box-shadow: 0 5px 15px rgba(187, 134, 252, 0.3);
+            box-shadow: 0 5px 15px rgba(109, 157, 197, 0.3);
         }
         
         .social-links a:hover::before {
@@ -387,9 +409,20 @@
                 font-size: 28px;
             }
             
+            .back-home {
+                position: static;
+                transform: none;
+                margin-top: 15px;
+                text-align: center;
+            }
+            
             .back-home a {
-                padding: 6px 10px;
-                font-size: 14px;
+                display: inline-flex;
+            }
+            
+            header {
+                padding-bottom: 15px;
+                text-align: center;
             }
         }
     </style>
@@ -405,8 +438,8 @@
     </header>
     
     <main class="container">
-        <h1>About Our Team</h1>
-        <p>We're a group of college students turning ideas into a real website. With a mix of skills and creativity, we’re building something cool, practical, and made with passion.</p>
+        <h1>Meet Our Creative Team</h1>
+        <p>We're a passionate group of college students transforming ideas into digital reality. Combining diverse skills with boundless creativity, we craft solutions that are both innovative and practical.</p>
         
         <div class="team-container">
             
@@ -415,11 +448,11 @@
                     <img src="amit.png" alt="Amit Kumar">
                     <h3>Amit Kumar</h3>
                     <p class="position">Lead Developer</p>
-                    <p class="description">Third-year B.Tech student who loves building cool, user-friendly websites and exploring new tech every day.</p>
+                    <p class="description">Third-year B.Tech student passionate about building intuitive web experiences. Loves exploring new technologies and solving complex problems with elegant code.</p>
                     <div class="social-links">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-github"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://www.instagram.com/amit_singh_96937/" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://github.com/Amitsingh9693" target="_blank"><i class="fab fa-github"></i></a>
+                        <a href="https://www.linkedin.com/in/amit-kumar-200638284/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
                     </div>
                 </div>
                 
@@ -445,30 +478,52 @@
                         <a href="https://github.com/pragati-2024" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a>
                         <a href="https://www.linkedin.com/in/pragati-b-238854269/" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
                     </div>
+
+                    <img src="#" alt="Enter your name">
+                <h3>Enter your name</h3>
+                <p class="position">Lead Developer</p>
+                <p class="description">Enter description</p>
+                <div class="social-links">
+                    <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                </div>
                 </div>
                 
                 <div class="team-member">
-                    <img src="#" alt="Enter Your name">
-                    <h3>Enter Your name</h3>
-                    <p class="position">Lead Developer</p>
-                    <p class="description">Enter about yourself</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-github"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
+                    <img src="#" alt="Enter your name">
+                <h3>Enter your name</h3>
+                <p class="position">Lead Developer</p>
+                <p class="description">Enter description</p>
+                <div class="social-links">
+                    <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                </div>
+                
+                <div class="team-member">
+                    <img src="#" alt="Enter your name">
+                <h3>Enter your name</h3>
+                <p class="position">Lead Developer</p>
+                <p class="description">Enter description</p>
+                <div class="social-links">
+                    <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                </div>
                 </div>
             </div>
             
             <div class="team-member team-member-single">
-                <img src="#" alt="Enter Your name">
-                <h3>Enter Your name</h3>
+                <img src="#" alt="Enter your name">
+                <h3>Enter your name</h3>
                 <p class="position">Lead Developer</p>
-                <p class="description">Enter about yourself</p>
+                <p class="description">Enter description</p>
                 <div class="social-links">
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-github"></i></a>
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a>
                 </div>
             </div>
         </div>
