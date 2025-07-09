@@ -1,75 +1,74 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <link href='https://cdn.boxicons.com/fonts/basic/boxicons.min.css' rel='stylesheet'>
-   <title>Login and Register</title>
-   <link rel="stylesheet" href="login.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - Mockneto</title>
+  <link rel="stylesheet" href="login.css"/>
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
-   <div class="wrapper">
-        <div class="form-header">
-            <div class="titles">
-                <div class="title-login">Login</div>
-                <div class="title-register">Register</div>
-            </div>
-        </div>
-        <form action="#" class="login-form" autocomplete="off">
-            <div class="input-box">
-        <input type="text" class="input-field" id="log-email" required>
-        <label for="log-email" class="label">Email</label>
-        <i class='bx bx-envelope icon'></i>
+  <div class="container">
+    <!-- Left Side Image -->
+    <div class="left">
+      <img src="6073424.jpg" alt="Brand Side Image" />
     </div>
-    <div class="input-box">
-        <input type="password" class="input-field" id="log-pass" required>
-        <label for="log-pass" class="label">Password</label>
-        <i class='bx  bx-lock icon'  ></i>
-    </div>
-    <div class="form-cols">
-        <div class="col-1"></div>
-        <div class="col-2">
+
+    <!-- Right Side Login/Register Box -->
+    <div class="right">
+      <div class="form-box">
+        <h1 class="brand-title">Mockneto</h1>
+
+        <div class="tabs">
+         <button id="loginTab" class="active" onclick="showLogin()">Login</button>
+         <button id="signupTab" onclick="showSignup()">Sign Up</button>
+     </div>
+
+        <!-- Login Form -->
+        <form id="loginForm" class="form active">
+          <div class="input-group">
+            <label>Email address</label>
+            <input type="email" placeholder="you@example.com" required>
+          </div>
+          <div class="input-group">
+            <label>Password</label>
+            <input type="password" placeholder="••••••••" required>
+          </div>
+          <div class="options">
+            <label><input type="checkbox"> Remember me</label>
             <a href="#">Forgot password?</a>
-        </div>
-    </div>
-    <div class="input-box">
-        <button class="btn-submit" id="SignInBtn">Sign In <i class='bx bx-log-in'></i></button>
-    </div>
-    <div class="switch-form">
-        <span>Don't have an account? <a href="#" onclick="registerFunction()">Register</a></span>
-    </div>
+          </div>
+          <button type="submit" class="btn-primary">Sign In</button>
+          <div class="separator">or</div>
+          <button class="btn-google">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google logo" style="width:20px; height:20px;">
+  Log in with Google
+</button>
         </form>
-        <form action="#" class="register-form" autocomplete="off">
-            <div class="input-box">
-        <input type="text" class="input-field" id="reg-name" required>
-        <label for="reg-name" class="label">Username</label>
-        <i class='bx bx-user icon'></i>
-    </div>
-    <div class="input-box">
-        <input type="text" class="input-field" id="reg-email" required>
-        <label for="reg-email" class="label">Email</label>
-        <i class='bx bx-envelope icon'></i>
-    </div>
-    <div class="input-box">
-        <input type="password" class="input-field" id="reg-pass" required>
-        <label for="reg-pass" class="label">Password</label>
-        <i class='bx  bx-key icon'  ></i> 
-    </div>
-    <div class="form-cols">
-        <div class="col-1">
-            <input type="checkbox" id="agree">
-            <label for="agree"> I agree to terms & conditions</label>
-        </div>
-        <div class="col-2"></div>
-    </div>
-    <div class="input-box">
-        <button class="btn-submit" id="SignUpBtn">Sign Up <i class='bx bx-user-plus' ></i></button>
-    </div>
-    <div class="switch-form">
-        <span>Already have an account? <a href="#" onclick="loginFunction()">Login</a></span>
-    </div>
+
+        <!-- Sign Up Form -->
+        <form id="signupForm" class="form">
+          <div class="input-group">
+            <label>Full Name</label>
+            <input type="text" placeholder="Your name" required>
+          </div>
+          <div class="input-group">
+            <label>Email address</label>
+            <input type="email" placeholder="you@example.com" required>
+          </div>
+          <div class="input-group">
+            <label>Password</label>
+            <input type="password" placeholder="Create a password" required>
+          </div>
+          <div class="input-group">
+            <label>Confirm Password</label>
+            <input type="password" placeholder="Confirm password" required>
+          </div>
+          <button type="submit" class="btn-primary">Create Account</button>
         </form>
+      </div>
     </div>
-   <script src="login.js"></script>
+  </div>
+  <script src="login.js"></script>
 </body>
+</html>
 </html>
