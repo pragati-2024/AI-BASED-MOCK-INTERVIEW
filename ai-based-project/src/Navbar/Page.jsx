@@ -11,7 +11,6 @@ const  Page = () => {
               <h3 className="hover:text-purple-300 transition">Practice Interview</h3>
               <h3 className="hover:text-purple-300 transition">Interview Tips</h3>
               <h3 className="hover:text-purple-300 transition">Contact Us</h3>
-              <h3 className="hover:text-purple-300 transition">About Us</h3>
 
               <button className="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-4 py-1 rounded-md shadow-sm transition">
                 Login
