@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+
 import InterviewImage from '../assets/an-isometric-3d-illustration-depicting-a_2I8c-hUtRFKGqF6ie-btZQ_B--sLBIqSV63F4x75Kj69A-removebg-preview.png';
 import Brain from '../assets/1F9E0_color.png';
 import Chat from '../assets/E248_color.png';
@@ -58,8 +59,8 @@ const Home = () => {
 
             <h1 class="hero-title">
   Accelerate Your <br />
-  <span class="dynamic-wrapper">
-    <span class="changing-text">Job Success</span><span class="cursor">|</span>
+  <span className="dynamic-wrapper">
+    <span className="changing-text">Job Success</span><span class="cursor">|</span>
   </span>
 </h1>
 
