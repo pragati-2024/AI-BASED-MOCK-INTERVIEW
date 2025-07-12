@@ -1,25 +1,19 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import Home from './home/Page';
-import Contact from './contact-us/Page';
-import Tips from './interview-tips/Page';
-import Login from './login/Page';
-import NotFound from './error/Page';
-import Footer from './footer/Page';
-import Navbar from './Navbar/Page';
+import Home from "./Pages/Home.jsx";
 
+import Header from "./components/Header.jsx";
+import Footer from "./components/Footer.jsx";
 
+import "./App.css";
 
-
-
-
-
-const App = () => {
+function App() {
   return (
     <div>
-      
+      <Header />
+      <Home />
+      <Footer />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

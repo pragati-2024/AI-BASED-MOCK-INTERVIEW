@@ -1,5 +1,5 @@
 @import "tailwindcss";
-body {
+/* body {
   margin: 0;
   padding: 0;
   background: radial-gradient(
@@ -15,4 +15,4 @@ body {
   overflow-x: hidden;
   overflow-y: auto; 
   padding-top: 70px;
-}
+} */
