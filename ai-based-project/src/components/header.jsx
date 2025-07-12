@@ -17,7 +17,7 @@ const Header = () => {
             <Link to="#">Practice Interview</Link>
             <Link to="/interviewtips">Interview Tips</Link>
             <Link to="/contactus">Contact Us</Link>
-            <Link to="Aboutus.html">About Us</Link>
+            <Link to="/aboutus">About Us</Link>
           </div>
 
           <div className="ftrial">

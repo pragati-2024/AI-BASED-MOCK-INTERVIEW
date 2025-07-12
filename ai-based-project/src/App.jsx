@@ -6,6 +6,7 @@ import Footer from "./components/Footer.jsx";
 import Login from './components/Login.jsx';
 import ContactUs from './components/ContactUs.jsx';
 import Eror404 from './components/Eror404.jsx'; 
+import AboutUs from './components/AboutUs.jsx';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 
@@ -28,6 +29,10 @@ function App() {
     {
       path: "/contactus",
       element: <><Header/><ContactUs/><Footer/></>
+    },
+    {
+      path: "/aboutus",
+      element: <><Header/><AboutUs/><Footer/></>
     },
   ])
     return (
