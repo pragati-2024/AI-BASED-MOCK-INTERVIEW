@@ -7,10 +7,12 @@ import Login from './components/Login.jsx';
 import ContactUs from './components/ContactUs.jsx';
 import Eror404 from './components/Eror404.jsx'; 
 import AboutUs from './components/AboutUs.jsx';
+import PracticeInterview from './Pages/Dashboard.jsx';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 
 import "./App.css";
+import Dashboard from './Pages/Dashboard.jsx';
 
 function App() {
   const router = createBrowserRouter([
@@ -21,6 +23,10 @@ function App() {
     {
       path: "/login",
       element: <><Header/><Login/></>
+    },
+    {
+      path: "/dashboard",
+      element: <><Header/><Dashboard/></>
     },
     {
       path: "/interviewtips",
