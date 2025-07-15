@@ -8,6 +8,9 @@ import ContactUs from './components/ContactUs.jsx';
 import Eror404 from './components/Eror404.jsx'; 
 import AboutUs from './components/AboutUs.jsx';
 import PracticeInterview from './Pages/Dashboard.jsx';
+import Reports from './Pages/Reports.jsx';
+import Profile from './Pages/Profile.jsx';
+import Settings from './Pages/Settings.jsx';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 
@@ -40,6 +43,18 @@ function App() {
     {
       path: "/aboutus",
       element: <><Header/><AboutUs/><Footer/></>
+    },
+    {
+      path: "/reports",
+      element: <><Header/><Reports/><Footer/></>
+    },
+    {
+      path: "/profile",
+      element: <><Header/><Profile/><Footer/></>
+    },
+    {
+      path: "/settings",
+      element: <><Header/><Settings/><Footer/></>
     },
   ])
     return (
