@@ -10,9 +10,8 @@ import AboutUs from './components/AboutUs.jsx';
 import Reports from './Pages/Reports.jsx';
 import Profile from './Pages/Profile.jsx';
 import Settings from './Pages/Settings.jsx';
+import QuestionBank from './Pages/QuestionBank.jsx';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-
-
 
 import "./App.css";
 import Dashboard from './Pages/Dashboard.jsx';
@@ -50,6 +49,10 @@ function App() {
     {
       path: "/profile",
       element: <><Header/><Profile/><Footer/></>
+    },
+    {
+      path: "/question",
+      element: <><Header/><QuestionBank/><Footer/></>
     },
     {
       path: "/settings",

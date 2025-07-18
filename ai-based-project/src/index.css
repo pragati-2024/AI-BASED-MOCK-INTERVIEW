@@ -16,3 +16,26 @@
   overflow-y: auto; 
   padding-top: 70px;
 } */
+.card-scroll-container {
+  display: flex; /* Lines up cards in a row */
+  overflow-x: auto; /* Enables horizontal scrolling */
+  gap: 1.5rem; /* Space between cards */
+  padding: 1rem 0.5rem; /* Adds some vertical padding */
+
+  /* This makes scrolling smooth on touch devices */
+  -webkit-overflow-scrolling: touch;
+  
+  /* Hides the scrollbar for a cleaner look (optional) */
+  scrollbar-width: none; /* For Firefox */
+}
+
+/* For Chrome, Safari, and Opera */
+.card-scroll-container::-webkit-scrollbar {
+  display: none; 
+}
+
+/* Styles for the individual cards inside the scroll container */
+.card-item {
+  flex: 0 0 280px; /* Prevents cards from shrinking and sets a fixed width */
+  height: auto; /* Let the card's content determine its height */
+}

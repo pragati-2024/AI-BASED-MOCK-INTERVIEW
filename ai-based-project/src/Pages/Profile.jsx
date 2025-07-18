@@ -40,7 +40,7 @@ function Profile() {
   };
 
     return (
-    <div className="min-h-screen bg-gradient-to-r from-[#1e1b4b] via-[#2e1065] to-[#1e1b4b] flex items-start justify-center p-6 sm:p-10">
+    <div className="min-h-screen radial-background flex items-start justify-center p-6 sm:p-10">
 
       <div className="w-full max-w-4xl bg-[#2a1e5c]/90 backdrop-blur-sm rounded-xl shadow-xl p-8 sm:p-12 text-white">
 

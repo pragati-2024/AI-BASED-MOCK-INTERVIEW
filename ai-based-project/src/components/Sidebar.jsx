@@ -6,8 +6,9 @@ import React from 'react';
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const navItems = [
     { icon: <FaHome />, text: "Dashboard", path: "/dashboard" },
-    { icon: <FaChartBar />, text: "Reports", path: "/reports" },
     { icon: <FaUser />, text: "Profile", path: "/profile" },
+    { icon: <FaUser />, text: "Question Bank", path: "/question" },
+    { icon: <FaChartBar />, text: "Reports", path: "/reports" },
     { icon: <FaCog />, text: "Settings", path: "/settings" },
   ]
 
