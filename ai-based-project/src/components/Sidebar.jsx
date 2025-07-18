@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { FaHome, FaChartBar, FaUser, FaCog } from 'react-icons/fa'
+import { FaHome, FaChartBar, FaUser, FaCog,FaQuestionCircle } from 'react-icons/fa'
 import { FiMenu, FiX } from 'react-icons/fi'
 import React from 'react';
 
@@ -9,6 +9,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
     { icon: <FaUser />, text: "Profile", path: "/profile" },
     { icon: <FaUser />, text: "Question Bank", path: "/question" },
     { icon: <FaChartBar />, text: "Reports", path: "/reports" },
+    { icon: <FaQuestionCircle />, text: "FAQ", path: "/faq" },
     { icon: <FaCog />, text: "Settings", path: "/settings" },
   ]
 

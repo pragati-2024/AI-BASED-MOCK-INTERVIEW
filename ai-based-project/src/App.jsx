@@ -11,6 +11,7 @@ import Reports from './Pages/Reports.jsx';
 import Profile from './Pages/Profile.jsx';
 import Settings from './Pages/Settings.jsx';
 import QuestionBank from './Pages/QuestionBank.jsx';
+import Faq from './Pages/Faq.jsx';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 import "./App.css";
@@ -58,6 +59,10 @@ function App() {
       path: "/settings",
       element: <><Header/><Settings/><Footer/></>
     },
+    {
+      path: "/Faq",
+      element: <><Header/><Faq/><Footer/></>
+    }
   ])
     return (
       <>
