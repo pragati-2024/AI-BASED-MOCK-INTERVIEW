@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "express": "^5.1.0",
+    "framer-motion": "^12.23.6",
+    "nodemon": "^3.1.10"
+  }
+}
