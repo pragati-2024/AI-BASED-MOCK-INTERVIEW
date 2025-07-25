@@ -8,4 +8,4 @@ const StartInterviewButton = ({ onClick }) => (
   </button>
 );
 
-export default StartInterviewButton
+export default StartInterviewButton;

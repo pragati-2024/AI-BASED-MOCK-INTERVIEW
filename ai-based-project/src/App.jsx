@@ -16,6 +16,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 import "./App.css";
 import Dashboard from './Pages/Dashboard.jsx';
+import InterviewSetup from './Pages/InterviewSetup.jsx';
 
 function App() {
   const router = createBrowserRouter([
@@ -62,6 +63,10 @@ function App() {
     {
       path: "/Faq",
       element: <><Header/><Faq/><Footer/></>
+    },
+    {
+      path: "/interviewsetup",
+      element: <><Header/><InterviewSetup/><Footer/></>
     }
   ])
     return (
