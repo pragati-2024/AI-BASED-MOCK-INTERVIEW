@@ -1,11 +1,11 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'http://localhost:5600/api', // Your backend URL
-  withCredentials: true, // For sending cookies
+  baseURL: 'http://localhost:5600',
+  withCredentials: true,
+  timeout: 10000,
 });
 
-// Add request interceptor to include token
 API.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
@@ -13,5 +13,16 @@ API.interceptors.request.use((config) => {
   }
   return config;
 });
+
+API.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response && error.response.status === 401) {
+      localStorage.removeItem('token');
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
 
 export default API;

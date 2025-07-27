@@ -4,11 +4,11 @@ const MONGODB_URI = "mongodb+srv://Moketon:Moketon%40123@moketon.sjkfjma.mongodb
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(MONGODB_URI);
+    await mongoose.connect(MONGODB_URI); // No need for deprecated options
     console.log("MongoDB connected successfully");
   } catch (err) {
     console.error("MongoDB connection failed:", err.message);
-    process.exit(1); // Exit the app if DB connection fails
+    process.exit(1);
   }
 };
 

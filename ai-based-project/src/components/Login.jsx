@@ -1,15 +1,75 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { signIn, signUp } from '../auth';
 import SideImage from '../assets/6073424 copy.jpg';
 
 const Login = () => {
   const [activeTab, setActiveTab] = useState('login');
-  const [isMounted, setIsMounted] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    setIsMounted(true);
-    return () => setIsMounted(false);
-  }, []);
+    // Check if user is already logged in
+    const token = localStorage.getItem('token');
+    if (token) {
+      navigate('/home'); // Redirect to home if already logged in
+    }
+  }, [navigate]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    try {
+      if (activeTab === 'login') {
+        // Login logic
+        const { email, password } = formData;
+        const response = await signIn({ 
+          Email: email, 
+          Password: password 
+        });
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('user', JSON.stringify(response.user));
+        navigate('/home');
+      } else {
+        // Signup logic
+        if (formData.password !== formData.confirmPassword) {
+          throw new Error("Passwords don't match");
+        }
+        
+        const { name, email, password } = formData;
+        const response = await signUp({ 
+          UserName: name, 
+          Email: email, 
+          Password: password 
+        });
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('user', JSON.stringify(response.user));
+        navigate('/login'); // Redirect to login after successful signup
+      }
+    } catch (err) {
+      setError(err.message || 'An error occurred. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Animation variants
   const containerVariants = {
@@ -100,6 +160,19 @@ const Login = () => {
             </p>
           </motion.div>
 
+          {/* Error Message */}
+          {error && (
+            <motion.div 
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-red-500/20 border border-red-500 text-red-300 px-4 py-3 rounded relative whitespace-pre-line"
+              role="alert"
+            >
+              <strong className="font-bold">Error: </strong>
+              <span className="block sm:inline">{error}</span>
+            </motion.div>
+          )}
+
           {/* Tab Navigation */}
           <motion.div variants={itemVariants} className="mb-6 sm:mb-8">
             <div className="flex justify-between bg-[#2c2c2c] rounded-lg p-1">
@@ -136,44 +209,141 @@ const Login = () => {
               exit="exit"
               className="space-y-4 sm:space-y-6"
             >
-              {activeTab === 'login' ? (
+              <form onSubmit={handleSubmit}>
+                {activeTab === 'login' ? (
+                  <>
+                    <motion.div variants={itemVariants}>
+                      <label className="block text-sm sm:text-base font-medium mb-2">Email address</label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        placeholder="you@example.com"
+                        required
+                        className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg bg-[#2c2c2c] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3f51b5] focus:border-transparent text-sm sm:text-base transition-all duration-200 border border-gray-700 hover:border-gray-600"
+                      />
+                    </motion.div>
+
+                    <motion.div variants={itemVariants}>
+                      <label className="block text-sm sm:text-base font-medium mb-2">Password</label>
+                      <input
+                        type="password"
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        placeholder="••••••••"
+                        required
+                        className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg bg-[#2c2c2c] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3f51b5] focus:border-transparent text-sm sm:text-base transition-all duration-200 border border-gray-700 hover:border-gray-600"
+                      />
+                    </motion.div>
+
+                    <motion.div variants={itemVariants} className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0">
+                      <label className="flex items-center text-xs sm:text-sm text-gray-400 cursor-pointer">
+                        <input 
+                          type="checkbox" 
+                          className="mr-2 w-4 h-4 rounded bg-[#2c2c2c] border-gray-600 focus:ring-[#3f51b5]" 
+                        />
+                        Remember me
+                      </label>
+                      <a href="#" className="text-[#8ab4f8] text-xs sm:text-sm hover:underline transition-colors">Forgot password?</a>
+                    </motion.div>
+
+                    <motion.button 
+                      type="submit"
+                      disabled={loading}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="w-full py-2 sm:py-3 bg-gradient-to-r from-[#3f51b5] to-[#5a6fff] rounded-lg hover:shadow-lg transition-all duration-200 text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-[#3f51b5] focus:ring-offset-2 focus:ring-offset-[#1a1a2e] disabled:opacity-70 disabled:cursor-not-allowed"
+                    >
+                      {loading ? (
+                        <span className="flex items-center justify-center">
+                          <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          Signing In...
+                        </span>
+                      ) : 'Sign In'}
+                    </motion.button>
+                  </>
+                ) : (
+                  <>
+                    <motion.div variants={itemVariants}>
+                      <label className="block text-sm sm:text-base font-medium mb-2">Full Name</label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        placeholder="Your name"
+                        required
+                        className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg bg-[#2c2c2c] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3f51b5] focus:border-transparent text-sm sm:text-base transition-all duration-200 border border-gray-700 hover:border-gray-600"
+                      />
+                    </motion.div>
+
+                    <motion.div variants={itemVariants}>
+                      <label className="block text-sm sm:text-base font-medium mb-2">Email address</label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        placeholder="you@example.com"
+                        required
+                        className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg bg-[#2c2c2c] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3f51b5] focus:border-transparent text-sm sm:text-base transition-all duration-200 border border-gray-700 hover:border-gray-600"
+                      />
+                    </motion.div>
+
+                    <motion.div variants={itemVariants}>
+                      <label className="block text-sm sm:text-base font-medium mb-2">Password</label>
+                      <input
+                        type="password"
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        placeholder="Create a password"
+                        required
+                        className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg bg-[#2c2c2c] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3f51b5] focus:border-transparent text-sm sm:text-base transition-all duration-200 border border-gray-700 hover:border-gray-600"
+                      />
+                    </motion.div>
+
+                    <motion.div variants={itemVariants}>
+                      <label className="block text-sm sm:text-base font-medium mb-2">Confirm Password</label>
+                      <input
+                        type="password"
+                        name="confirmPassword"
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
+                        placeholder="Confirm password"
+                        required
+                        className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg bg-[#2c2c2c] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3f51b5] focus:border-transparent text-sm sm:text-base transition-all duration-200 border border-gray-700 hover:border-gray-600"
+                      />
+                    </motion.div>
+
+                    <motion.button 
+                      type="submit"
+                      disabled={loading}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="w-full py-2 sm:py-3 bg-gradient-to-r from-[#3f51b5] to-[#5a6fff] rounded-lg hover:shadow-lg transition-all duration-200 text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-[#3f51b5] focus:ring-offset-2 focus:ring-offset-[#1a1a2e] disabled:opacity-70 disabled:cursor-not-allowed"
+                    >
+                      {loading ? (
+                        <span className="flex items-center justify-center">
+                          <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          Creating Account...
+                        </span>
+                      ) : 'Create Account'}
+                    </motion.button>
+                  </>
+                )}
+              </form>
+
+              {activeTab === 'login' && (
                 <>
-                  <motion.div variants={itemVariants}>
-                    <label className="block text-sm sm:text-base font-medium mb-2">Email address</label>
-                    <input
-                      type="email"
-                      placeholder="you@example.com"
-                      required
-                      className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg bg-[#2c2c2c] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3f51b5] focus:border-transparent text-sm sm:text-base transition-all duration-200 border border-gray-700 hover:border-gray-600"
-                    />
-                  </motion.div>
-
-                  <motion.div variants={itemVariants}>
-                    <label className="block text-sm sm:text-base font-medium mb-2">Password</label>
-                    <input
-                      type="password"
-                      placeholder="••••••••"
-                      required
-                      className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg bg-[#2c2c2c] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3f51b5] focus:border-transparent text-sm sm:text-base transition-all duration-200 border border-gray-700 hover:border-gray-600"
-                    />
-                  </motion.div>
-
-                  <motion.div variants={itemVariants} className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0">
-                    <label className="flex items-center text-xs sm:text-sm text-gray-400 cursor-pointer">
-                      <input type="checkbox" className="mr-2 w-4 h-4 rounded bg-[#2c2c2c] border-gray-600 focus:ring-[#3f51b5]" />
-                      Remember me
-                    </label>
-                    <a href="#" className="text-[#8ab4f8] text-xs sm:text-sm hover:underline transition-colors">Forgot password?</a>
-                  </motion.div>
-
-                  <motion.button 
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="w-full py-2 sm:py-3 bg-gradient-to-r from-[#3f51b5] to-[#5a6fff] rounded-lg hover:shadow-lg transition-all duration-200 text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-[#3f51b5] focus:ring-offset-2 focus:ring-offset-[#1a1a2e]"
-                  >
-                    Sign In
-                  </motion.button>
-
                   <motion.div variants={itemVariants} className="relative">
                     <div className="absolute inset-0 flex items-center">
                       <div className="w-full border-t border-gray-600"></div>
@@ -196,60 +366,12 @@ const Login = () => {
                     Log in with Google
                   </motion.button>
                 </>
-              ) : (
-                <>
-                  <motion.div variants={itemVariants}>
-                    <label className="block text-sm sm:text-base font-medium mb-2">Full Name</label>
-                    <input
-                      type="text"
-                      placeholder="Your name"
-                      required
-                      className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg bg-[#2c2c2c] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3f51b5] focus:border-transparent text-sm sm:text-base transition-all duration-200 border border-gray-700 hover:border-gray-600"
-                    />
-                  </motion.div>
+              )}
 
-                  <motion.div variants={itemVariants}>
-                    <label className="block text-sm sm:text-base font-medium mb-2">Email address</label>
-                    <input
-                      type="email"
-                      placeholder="you@example.com"
-                      required
-                      className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg bg-[#2c2c2c] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3f51b5] focus:border-transparent text-sm sm:text-base transition-all duration-200 border border-gray-700 hover:border-gray-600"
-                    />
-                  </motion.div>
-
-                  <motion.div variants={itemVariants}>
-                    <label className="block text-sm sm:text-base font-medium mb-2">Password</label>
-                    <input
-                      type="password"
-                      placeholder="Create a password"
-                      required
-                      className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg bg-[#2c2c2c] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3f51b5] focus:border-transparent text-sm sm:text-base transition-all duration-200 border border-gray-700 hover:border-gray-600"
-                    />
-                  </motion.div>
-
-                  <motion.div variants={itemVariants}>
-                    <label className="block text-sm sm:text-base font-medium mb-2">Confirm Password</label>
-                    <input
-                      type="password"
-                      placeholder="Confirm password"
-                      required
-                      className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg bg-[#2c2c2c] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3f51b5] focus:border-transparent text-sm sm:text-base transition-all duration-200 border border-gray-700 hover:border-gray-600"
-                    />
-                  </motion.div>
-
-                  <motion.button 
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="w-full py-2 sm:py-3 bg-gradient-to-r from-[#3f51b5] to-[#5a6fff] rounded-lg hover:shadow-lg transition-all duration-200 text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-[#3f51b5] focus:ring-offset-2 focus:ring-offset-[#1a1a2e]"
-                  >
-                    Create Account
-                  </motion.button>
-
-                  <motion.p variants={itemVariants} className="text-xs text-gray-500 text-center">
-                    By signing up, you agree to our <a href="#" className="text-[#8ab4f8] hover:underline">Terms</a> and <a href="#" className="text-[#8ab4f8] hover:underline">Privacy Policy</a>.
-                  </motion.p>
-                </>
+              {activeTab === 'signup' && (
+                <motion.p variants={itemVariants} className="text-xs text-gray-500 text-center">
+                  By signing up, you agree to our <a href="#" className="text-[#8ab4f8] hover:underline">Terms</a> and <a href="#" className="text-[#8ab4f8] hover:underline">Privacy Policy</a>.
+                </motion.p>
               )}
             </motion.div>
           </AnimatePresence>

@@ -1,16 +1,17 @@
-require("dotenv").config();
 const express = require("express");
-const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 const cors = require("cors");
-const connectDB = require("./Connection/connection");
 const userRoutes = require("./Route/UserRoutes");
+const connectDB = require("./Connection/connection");
 
 const app = express();
 
 // Middleware
-app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors({
+  origin: "http://localhost:5173", // Your frontend URL
+  credentials: true
+}));
+app.use(express.json());
 
 // Database connection
 connectDB();
@@ -19,7 +20,7 @@ connectDB();
 app.use("/api/users", userRoutes);
 
 // Health check
-app.get("/health", (req, res) => {
+app.get("/api/health", (req, res) => {
   res.status(200).json({
     status: "OK",
     database: mongoose.connection.readyState === 1 ? "Connected" : "Disconnected",
@@ -32,8 +33,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: "Internal Server Error" });
 });
 
-// Start server
-const PORT = process.env.PORT || 5600;
+const PORT = 5600;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });

@@ -1,8 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const { createUser } = require("../Middleware/UserMiddleware");
+const { createUser, loginUser } = require("../Middleware/UserMiddleware");
 
-// Input validation middleware
 const validateSignup = (req, res, next) => {
   const { UserName, Email, Password } = req.body;
   if (!UserName || !Email || !Password) {
@@ -11,7 +10,15 @@ const validateSignup = (req, res, next) => {
   next();
 };
 
-// POST /api/users/signup
+const validateLogin = (req, res, next) => {
+  const { Email, Password } = req.body;
+  if (!Email || !Password) {
+    return res.status(400).json({ message: "Email and password are required" });
+  }
+  next();
+};
+
 router.post("/signup", validateSignup, createUser);
+router.post("/signin", validateLogin, loginUser);
 
 module.exports = router;
