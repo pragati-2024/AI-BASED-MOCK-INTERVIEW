@@ -1,6 +1,28 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const  Page = () => {
+const Page = () => {
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Get user data from localStorage
+    const token = localStorage.getItem('token');
+    const userData = localStorage.getItem('user');
+
+    if (token && userData) {
+      try {
+        const parsedUser = JSON.parse(userData);
+        setUser(parsedUser);
+      } catch (err) {
+        console.error('Error parsing user data:', err);
+      }
+    }
+  }, []);
+
+  
   return (
     <div className='bg-white/5 min-h-screen w-full fixed top-0 left-0 '>
             <div className="h-min w-full py-4 px-8 bg-gradient-to-r from-[#0f0c29] via-[#302b63] to-[#24243e] flex justify-between items-center shadow-md rounded-b-lg">
@@ -11,10 +33,12 @@ const  Page = () => {
               <h3 className="hover:text-purple-300 transition">Practice Interview</h3>
               <h3 className="hover:text-purple-300 transition">Interview Tips</h3>
               <h3 className="hover:text-purple-300 transition">Contact Us</h3>
-
+              {user ? (
+          <Profile />
+        ) : (
               <button className="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-4 py-1 rounded-md shadow-sm transition">
                 Login
-              </button>
+              </button>)}
             </div>
           </div>
           <div className='hero-wrapper w-full bg-transparent text-white px-20 py-24 flex items-center justify-between gap-12'>
