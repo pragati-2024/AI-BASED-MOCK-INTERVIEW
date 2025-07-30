@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Sidebar from "../components/Sidebar";
 import {
   Search,
   ChevronDown,
@@ -88,8 +90,12 @@ const Faq = () => {
   const filteredFaqs = faqData.filter((faq) =>
     faq.question.toLowerCase().includes(searchTerm.toLowerCase())
   );
+ const [sidebarOpen, setSidebarOpen] = useState(true);
 
   return (
+    <div className="flex min-h-screen bg-gray-900 text-white">
+      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+      <div className={`flex-1 p-8 transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-20'}`}>
     <div className="min-h-screen bg-[#0f0e17] text-white py-12 px-4">
       <h1 className="text-5xl sm:text-6xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
         Frequently Asked Questions
@@ -137,6 +143,8 @@ const Faq = () => {
         ))}
       </div>
     </div>
+    </div>
+      </div>
   );
 };
 

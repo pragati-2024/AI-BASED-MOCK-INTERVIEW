@@ -1,5 +1,6 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
-import React from 'react';
+import Sidebar from '../components/Sidebar.jsx';
+import React, { useState, useEffect } from 'react';
 
 const data = [
   { name: 'Jan', interviews: 3, success: 2 },
@@ -11,7 +12,12 @@ const data = [
 ]
 
 const Reports = () => {
-  return (
+   const [sidebarOpen, setSidebarOpen] = useState(true);
+  
+    return (
+      <div className="flex min-h-screen bg-gray-900 text-white">
+        <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+        <div className={`flex-1 p-8 transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-20'}`}>
     <div className="p-8">
       <h1 className="text-2xl font-bold mb-6">Interview Reports</h1>
       
@@ -41,6 +47,8 @@ const Reports = () => {
         <StatCard title="Avg. Score" value="7.8/10" change="-0.3" />
       </div>
     </div>
+    </div>
+      </div>
   )
 }
 

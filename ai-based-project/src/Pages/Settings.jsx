@@ -1,6 +1,13 @@
 import React from 'react';
+import Sidebar from '../components/Sidebar.jsx';
+import { useState } from 'react';
 const Settings = () => {
+   const [sidebarOpen, setSidebarOpen] = useState(true);
+
   return (
+    <div className="flex min-h-screen bg-gray-900 text-white">
+      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+      <div className={`flex-1 p-8 transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-20'}`}>
     <div className="p-8">
       <h1 className="text-2xl font-bold mb-6">Settings</h1>
       
@@ -32,6 +39,8 @@ const Settings = () => {
         </div>
       </div>
     </div>
+    </div>
+      </div>
   )
 }
 

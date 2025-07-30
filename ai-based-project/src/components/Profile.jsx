@@ -51,7 +51,7 @@ const Profile = () => {
                 onClick={() => setOpen((prev) => !prev)}
             >
                 <img
-                    src={user.avatar || 'https://i.pravatar.cc/40'}
+                    src={user.avatar || 'https://i.pravatar.cc/400'}
                     alt="User"
                     className="w-10 h-10 rounded-full object-cover"
                 />

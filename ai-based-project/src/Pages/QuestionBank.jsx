@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Sidebar from '../components/Sidebar.jsx';
 
 const questionData = [
   { id: 1, name: 'HTML Notes', description: 'View Interview Questions', category: 'Frontend', image: '../assets/html.png', path: 'html' },
@@ -34,8 +35,12 @@ const QuestionBank = () => {
   });
 
   const groupedAndFilteredData = groupByCategory(filteredData);
+ const [sidebarOpen, setSidebarOpen] = useState(true);
 
   return (
+    <div className="flex min-h-screen bg-gray-900 text-white">
+      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+      <div className={`flex-1 p-8 transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-20'}`}>
     <div className="min-h-screen px-6 py-10 radial-background text-white">
       <div className="text-center mb-8">
         <h1 className="text-4xl font-bold mb-2">Interview Question Bank</h1>
@@ -96,6 +101,8 @@ const QuestionBank = () => {
         ))}
       </div>
     </div>
+    </div>
+      </div>
   );
 };
 
