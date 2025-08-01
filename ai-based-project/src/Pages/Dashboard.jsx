@@ -9,13 +9,13 @@ const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [interviewFeedback, setFeedbackHistory] = useState([]);
 
-  useEffect(() => {
-    // Get stored feedback from localStorage
-    const stored = localStorage.getItem("interviewFeedback");
-    if (stored) {
-      setFeedbackHistory(JSON.parse(stored)); // Convert back to array
-    }
-  }, []);
+  // useEffect(() => {
+  //   // Get stored feedback from localStorage
+  //   const stored = localStorage.getItem("interviewFeedback");
+  //   if (stored) {
+  //     setFeedbackHistory(JSON.parse(stored)); // Convert back to array
+  //   }
+  // }, []);
   
   const motivationalQuotes = [
     "Believe you can and you're halfway there. - Theodore Roosevelt",

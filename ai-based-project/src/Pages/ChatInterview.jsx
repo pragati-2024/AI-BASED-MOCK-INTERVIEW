@@ -44,7 +44,7 @@ const ChatInterview = () => {
       }. Focus on ${interviewDetails.focusArea} aspects. Return only the questions, one per line, without numbering.`;
 
       const API_KEY = "AIzaSyBHVJ6219_JNKkVGCkq9m47ABaCcJ181fc"; // Replace with your actual API key
-      const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+      const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`;
 
       const response = await fetch(API_URL, {
         method: "POST",
@@ -128,7 +128,7 @@ const ChatInterview = () => {
       5. Suggested next steps`;
 
       const API_KEY = "AIzaSyBHVJ6219_JNKkVGCkq9m47ABaCcJ181fc"; // Replace with your actual API key
-      const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+      const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`;
 
       const response = await fetch(API_URL, {
         method: "POST",
