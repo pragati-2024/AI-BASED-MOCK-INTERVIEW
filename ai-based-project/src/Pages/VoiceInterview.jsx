@@ -5,6 +5,7 @@ import {
   getMbaSpecialization,
   MBA_SPECIALIZATIONS,
 } from "../utils/mbaCatalog";
+import { fetchWithWarmupRetry } from "../utils/backendWarmup.js";
 
 const VoiceInterview = () => {
   const streamRef = useRef(null);
@@ -43,9 +44,12 @@ const VoiceInterview = () => {
 
   const verdictStyles = (verdict) => {
     const v = String(verdict || "").toLowerCase();
-    if (v === "strong") return "bg-green-600/20 text-green-200 border border-green-500/40";
-    if (v === "okay") return "bg-yellow-600/20 text-yellow-200 border border-yellow-500/40";
-    if (v === "weak") return "bg-red-600/20 text-red-200 border border-red-500/40";
+    if (v === "strong")
+      return "bg-green-600/20 text-green-200 border border-green-500/40";
+    if (v === "okay")
+      return "bg-yellow-600/20 text-yellow-200 border border-yellow-500/40";
+    if (v === "weak")
+      return "bg-red-600/20 text-red-200 border border-red-500/40";
     return "bg-gray-600/20 text-gray-200 border border-gray-500/40";
   };
 
@@ -84,7 +88,10 @@ const VoiceInterview = () => {
       const existing = stored ? JSON.parse(stored) : [];
       const history = Array.isArray(existing) ? existing : [];
       history.unshift(entry);
-      localStorage.setItem("interviewFeedback", JSON.stringify(history.slice(0, 20)));
+      localStorage.setItem(
+        "interviewFeedback",
+        JSON.stringify(history.slice(0, 20)),
+      );
     } catch {
       localStorage.setItem("interviewFeedback", text);
     }
@@ -132,9 +139,12 @@ const VoiceInterview = () => {
   useEffect(() => {
     const sync = () => {
       try {
-        const raw = localStorage.getItem('appSettings');
+        const raw = localStorage.getItem("appSettings");
         const parsed = raw ? JSON.parse(raw) : null;
-        const next = parsed && typeof parsed.autoPlayVoice === 'boolean' ? parsed.autoPlayVoice : true;
+        const next =
+          parsed && typeof parsed.autoPlayVoice === "boolean"
+            ? parsed.autoPlayVoice
+            : true;
         setAutoPlayVoice(next);
       } catch {
         setAutoPlayVoice(true);
@@ -142,15 +152,18 @@ const VoiceInterview = () => {
     };
 
     sync();
-    window.addEventListener('storage', sync);
-    window.addEventListener('settings-updated', sync);
+    window.addEventListener("storage", sync);
+    window.addEventListener("settings-updated", sync);
     return () => {
-      window.removeEventListener('storage', sync);
-      window.removeEventListener('settings-updated', sync);
+      window.removeEventListener("storage", sync);
+      window.removeEventListener("settings-updated", sync);
     };
   }, []);
 
-  const normalizeText = (value) => String(value || "").replace(/\s+/g, " ").trim();
+  const normalizeText = (value) =>
+    String(value || "")
+      .replace(/\s+/g, " ")
+      .trim();
 
   const getQuestionText = (item) => {
     if (!item) return "";
@@ -173,7 +186,12 @@ const VoiceInterview = () => {
 
   const isBuiltInCompany = (company) => {
     const c = normalizeCompany(company);
-    return c.includes("google") || c.includes("amazon") || c.includes("microsoft") || c === "ms";
+    return (
+      c.includes("google") ||
+      c.includes("amazon") ||
+      c.includes("microsoft") ||
+      c === "ms"
+    );
   };
 
   const buildAnswerStructure = (question) => {
@@ -207,7 +225,9 @@ const VoiceInterview = () => {
     if (
       /^why\s+(google|amazon|microsoft)\b/i.test(q) ||
       (/\bwhy\b/.test(qLower) &&
-        (qLower.includes("google") || qLower.includes("amazon") || qLower.includes("microsoft")))
+        (qLower.includes("google") ||
+          qLower.includes("amazon") ||
+          qLower.includes("microsoft")))
     ) {
       return {
         title: "Why This Company (3 reasons)",
@@ -258,7 +278,11 @@ const VoiceInterview = () => {
     }
 
     // Product improvement
-    if (/improve\s+an\s+existing\s+google\s+product|improve\s+an\s+existing\s+product|improve\s+google\s+product/i.test(qLower)) {
+    if (
+      /improve\s+an\s+existing\s+google\s+product|improve\s+an\s+existing\s+product|improve\s+google\s+product/i.test(
+        qLower,
+      )
+    ) {
       return {
         title: "Product Improvement (User–Problem–Solution)",
         template:
@@ -272,7 +296,11 @@ const VoiceInterview = () => {
     }
 
     // System design
-    if (/design\s+a\s+url\s+shortening|url\s+shorten|bit\.ly|design\s+a\s+.*service|system\s+design/i.test(qLower)) {
+    if (
+      /design\s+a\s+url\s+shortening|url\s+shorten|bit\.ly|design\s+a\s+.*service|system\s+design/i.test(
+        qLower,
+      )
+    ) {
       return {
         title: "System Design (Clarify → Design → Scale)",
         template:
@@ -287,7 +315,11 @@ const VoiceInterview = () => {
     }
 
     // URL in browser
-    if (/what\s+happens\s+when\s+you\s+enter\s+a\s+url|web\s+browser/i.test(qLower)) {
+    if (
+      /what\s+happens\s+when\s+you\s+enter\s+a\s+url|web\s+browser/i.test(
+        qLower,
+      )
+    ) {
       return {
         title: "Explain A Process (Steps + Why)",
         template:
@@ -304,7 +336,7 @@ const VoiceInterview = () => {
     // Behavioral (STAR)
     if (
       /\btell me about a time\b|\bdescribe a time\b|\bdisagreed\b|\bconflict\b|\bteam\s+project\b|\bchallenge\b|\bfeedback\b|\bcriticism\b|\bremote\s+team\b|\bstakeholder\b|\bteammate\b/i.test(
-        qLower
+        qLower,
       )
     ) {
       return {
@@ -342,7 +374,10 @@ const VoiceInterview = () => {
 
   const buildAssistantHelp = (question) => {
     const q = normalizeText(question);
-    const isBehavioral = /\btell me about a time\b|\bhandled\b|\bconflict\b|\bstakeholder\b|\bteammate\b|\bdisagree\b/i.test(q);
+    const isBehavioral =
+      /\btell me about a time\b|\bhandled\b|\bconflict\b|\bstakeholder\b|\bteammate\b|\bdisagree\b/i.test(
+        q,
+      );
 
     // Company-specific sample (user-provided) for Microsoft Q1
     if (
@@ -505,16 +540,19 @@ const VoiceInterview = () => {
 
     // If the user has no real answer (empty / "I don't know"), fill the sample answer.
     const cur = normalizeText(currentAnswer);
-    const looksLikeIDK = /\b(idk|i\s*(do\s*not|don't)\s*know|i\s*dont\s*know|dont\s*know|no\s*idea|not\s*sure|can't\s*answer|cannot\s*answer)\b/i.test(
-      cur
-    );
+    const looksLikeIDK =
+      /\b(idk|i\s*(do\s*not|don't)\s*know|i\s*dont\s*know|dont\s*know|no\s*idea|not\s*sure|can't\s*answer|cannot\s*answer)\b/i.test(
+        cur,
+      );
     if (!cur || looksLikeIDK || reason === "empty") {
       setCurrentAnswer(help.sampleAnswer);
       sttSessionRef.current.final = help.sampleAnswer;
       sttSessionRef.current.interim = "";
     }
 
-    speakText(`${help.spokenText} Here's a sample answer. ${help.sampleAnswer}`);
+    speakText(
+      `${help.spokenText} Here's a sample answer. ${help.sampleAnswer}`,
+    );
   };
 
   const checkCurrentAnswer = async () => {
@@ -545,7 +583,9 @@ const VoiceInterview = () => {
 
       if (!response.ok) {
         const errText = await response.text().catch(() => "");
-        throw new Error(errText || `Failed to check answer (${response.status})`);
+        throw new Error(
+          errText || `Failed to check answer (${response.status})`,
+        );
       }
 
       const data = await response.json();
@@ -643,17 +683,25 @@ const VoiceInterview = () => {
         "audio/webm",
         "audio/ogg;codecs=opus",
       ];
-      const mimeType = preferredTypes.find((t) => MediaRecorder.isTypeSupported(t));
+      const mimeType = preferredTypes.find((t) =>
+        MediaRecorder.isTypeSupported(t),
+      );
 
-      const recorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
+      const recorder = new MediaRecorder(
+        stream,
+        mimeType ? { mimeType } : undefined,
+      );
       mediaRecorderRef.current = recorder;
 
       recorder.ondataavailable = (evt) => {
-        if (evt.data && evt.data.size > 0) recordedChunksRef.current.push(evt.data);
+        if (evt.data && evt.data.size > 0)
+          recordedChunksRef.current.push(evt.data);
       };
 
       recorder.onstop = () => {
-        const blob = new Blob(recordedChunksRef.current, { type: recorder.mimeType || "audio/webm" });
+        const blob = new Blob(recordedChunksRef.current, {
+          type: recorder.mimeType || "audio/webm",
+        });
         const url = URL.createObjectURL(blob);
         setRecordedUrl(url);
         recordedChunksRef.current = [];
@@ -689,18 +737,24 @@ const VoiceInterview = () => {
   const startMic = async () => {
     setPermissionError("");
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: false,
+      });
       streamRef.current = stream;
       setIsMicOn(true);
     } catch (err) {
-      setPermissionError(err?.message || "Microphone permission denied or unavailable.");
+      setPermissionError(
+        err?.message || "Microphone permission denied or unavailable.",
+      );
       stopMic();
     }
   };
 
   useEffect(() => {
     // Setup speech recognition if available (optional)
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SpeechRecognition) {
       const rec = new SpeechRecognition();
       rec.continuous = true;
@@ -717,7 +771,10 @@ const VoiceInterview = () => {
         }
 
         if (final) {
-          sttSessionRef.current.final = appendUnique(sttSessionRef.current.final, final);
+          sttSessionRef.current.final = appendUnique(
+            sttSessionRef.current.final,
+            final,
+          );
         }
         sttSessionRef.current.interim = normalizeText(interim);
 
@@ -730,7 +787,7 @@ const VoiceInterview = () => {
         // If user says they don't know, immediately provide help (text + voice)
         if (
           /\b(idk|i\s*(do\s*not|don't)\s*know|i\s*dont\s*know|dont\s*know|no\s*idea|not\s*sure|can't\s*answer|cannot\s*answer)\b/i.test(
-            combined
+            combined,
           )
         ) {
           stopSpeechRecognition();
@@ -827,7 +884,9 @@ const VoiceInterview = () => {
             ...prev,
             track: nextTrack,
             mbaSpecialization: spec.key,
-            jobRole: shouldAutoJobRole ? mbaRoles[0] || "Management Trainee" : prev.jobRole,
+            jobRole: shouldAutoJobRole
+              ? mbaRoles[0] || "Management Trainee"
+              : prev.jobRole,
             focusArea: mbaFocusAreas[0] || "Consumer behavior",
           };
         }
@@ -895,7 +954,7 @@ const VoiceInterview = () => {
     if (lastHelpQuestionIndexRef.current === currentQuestionIndex) return;
     if (
       /\b(idk|i\s*(do\s*not|don't)\s*know|i\s*dont\s*know|dont\s*know|no\s*idea|not\s*sure|can't\s*answer|cannot\s*answer)\b/i.test(
-        text
+        text,
       )
     ) {
       provideInstantHelp("typed");
@@ -907,26 +966,32 @@ const VoiceInterview = () => {
     try {
       const useBank = isBuiltInCompany(interviewDetails.company);
       const token = localStorage.getItem("token");
-      const response = await fetch("/api/interview/questions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      const response = await fetchWithWarmupRetry(
+        "/api/interview/questions",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+          body: JSON.stringify({
+            company: interviewDetails.company,
+            jobRole: interviewDetails.jobRole,
+            level: interviewDetails.level,
+            focusArea: interviewDetails.focusArea,
+            track: interviewDetails.track,
+            mbaSpecialization: interviewDetails.mbaSpecialization,
+            ...(useBank ? {} : { count: 5 }),
+          }),
         },
-        body: JSON.stringify({
-          company: interviewDetails.company,
-          jobRole: interviewDetails.jobRole,
-          level: interviewDetails.level,
-          focusArea: interviewDetails.focusArea,
-          track: interviewDetails.track,
-          mbaSpecialization: interviewDetails.mbaSpecialization,
-          ...(useBank ? {} : { count: 5 }),
-        }),
-      });
+        { retries: 1 },
+      );
 
       if (!response.ok) {
         const errText = await response.text().catch(() => "");
-        throw new Error(errText || `Failed to fetch questions (${response.status})`);
+        throw new Error(
+          errText || `Failed to fetch questions (${response.status})`,
+        );
       }
 
       const data = await response.json();
@@ -939,7 +1004,9 @@ const VoiceInterview = () => {
       setInterviewStage("interview");
       setAssistantHelp(null);
       setAnswerCheck(null);
-      setAnswerStructure(qs[0] ? buildAnswerStructure(getQuestionText(qs[0])) : null);
+      setAnswerStructure(
+        qs[0] ? buildAnswerStructure(getQuestionText(qs[0])) : null,
+      );
       setShowIdealAnswer(false);
       lastHelpQuestionIndexRef.current = -1;
       lastCheckedAnswerRef.current = "";
@@ -978,7 +1045,10 @@ const VoiceInterview = () => {
       const qText = getQuestionText(questions[currentQuestionIndex]);
       const normalizedAnswer = normalizeText(currentAnswer);
       persistPerQuestionHistory({
-        score: typeof answerCheck?.score === "number" ? answerCheck.score : undefined,
+        score:
+          typeof answerCheck?.score === "number"
+            ? answerCheck.score
+            : undefined,
         text:
           `Q${currentQuestionIndex + 1}: ${qText}\n` +
           `A: ${normalizedAnswer}\n` +
@@ -1034,7 +1104,9 @@ const VoiceInterview = () => {
 
       if (!response.ok) {
         const errText = await response.text().catch(() => "");
-        throw new Error(errText || `Failed to fetch feedback (${response.status})`);
+        throw new Error(
+          errText || `Failed to fetch feedback (${response.status})`,
+        );
       }
 
       const data = await response.json();
@@ -1047,7 +1119,10 @@ const VoiceInterview = () => {
       setFeedback(
         "Failed to generate feedback. Here's a basic analysis:\n\n" +
           questions
-            .map((q, i) => `Q${i + 1}: ${getQuestionText(q)}\nA: ${answers[i] || "No answer"}\n`)
+            .map(
+              (q, i) =>
+                `Q${i + 1}: ${getQuestionText(q)}\nA: ${answers[i] || "No answer"}\n`,
+            )
             .join("\n"),
       );
       setInterviewStage("feedback");
@@ -1070,16 +1145,22 @@ const VoiceInterview = () => {
       <div className="max-w-4xl mx-auto">
         {interviewStage === "setup" && (
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
-            <h1 className="text-2xl font-bold mb-6 text-center">Voice Interview</h1>
+            <h1 className="text-2xl font-bold mb-6 text-center">
+              Voice Interview
+            </h1>
 
             <div className="grid gap-4 mb-6">
               <div>
-                <label className="block mb-2 text-gray-300">Company (optional)</label>
+                <label className="block mb-2 text-gray-300">
+                  Company (optional)
+                </label>
                 <input
                   type="text"
                   placeholder="e.g. Google, Amazon"
                   value={interviewDetails.company}
-                  onChange={(e) => handleDetailChange("company", e.target.value)}
+                  onChange={(e) =>
+                    handleDetailChange("company", e.target.value)
+                  }
                   className="w-full p-3 bg-gray-700 rounded border border-gray-600 focus:border-blue-500 focus:outline-none"
                 />
               </div>
@@ -1094,13 +1175,21 @@ const VoiceInterview = () => {
                       : "e.g. Frontend Developer"
                   }
                   value={interviewDetails.jobRole}
-                  onChange={(e) => handleDetailChange("jobRole", e.target.value)}
-                  list={interviewDetails.track === "mba" ? "mba-job-roles-voice" : undefined}
+                  onChange={(e) =>
+                    handleDetailChange("jobRole", e.target.value)
+                  }
+                  list={
+                    interviewDetails.track === "mba"
+                      ? "mba-job-roles-voice"
+                      : undefined
+                  }
                   className="w-full p-3 bg-gray-700 rounded border border-gray-600 focus:border-blue-500 focus:outline-none"
                 />
                 {interviewDetails.track === "mba" && (
                   <datalist id="mba-job-roles-voice">
-                    {getMbaJobRoleSuggestions(interviewDetails.mbaSpecialization).map((r) => (
+                    {getMbaJobRoleSuggestions(
+                      interviewDetails.mbaSpecialization,
+                    ).map((r) => (
                       <option key={r} value={r} />
                     ))}
                   </datalist>
@@ -1108,7 +1197,9 @@ const VoiceInterview = () => {
               </div>
 
               <div>
-                <label className="block mb-2 text-gray-300">Experience Level</label>
+                <label className="block mb-2 text-gray-300">
+                  Experience Level
+                </label>
                 <select
                   value={interviewDetails.level}
                   onChange={(e) => handleDetailChange("level", e.target.value)}
@@ -1121,7 +1212,9 @@ const VoiceInterview = () => {
               </div>
 
               <div>
-                <label className="block mb-2 text-gray-300">Candidate Type</label>
+                <label className="block mb-2 text-gray-300">
+                  Candidate Type
+                </label>
                 <select
                   value={interviewDetails.track}
                   onChange={(e) => handleDetailChange("track", e.target.value)}
@@ -1134,10 +1227,14 @@ const VoiceInterview = () => {
 
               {interviewDetails.track === "mba" && (
                 <div>
-                  <label className="block mb-2 text-gray-300">MBA Specialization</label>
+                  <label className="block mb-2 text-gray-300">
+                    MBA Specialization
+                  </label>
                   <select
                     value={interviewDetails.mbaSpecialization}
-                    onChange={(e) => handleDetailChange("mbaSpecialization", e.target.value)}
+                    onChange={(e) =>
+                      handleDetailChange("mbaSpecialization", e.target.value)
+                    }
                     className="w-full p-3 bg-gray-700 rounded border border-gray-600 focus:border-blue-500 focus:outline-none"
                   >
                     {MBA_SPECIALIZATIONS.map((s) => (
@@ -1147,7 +1244,10 @@ const VoiceInterview = () => {
                     ))}
                   </select>
                   <div className="mt-2 text-sm text-gray-300">
-                    {getMbaSpecialization(interviewDetails.mbaSpecialization)?.interviewLine}
+                    {
+                      getMbaSpecialization(interviewDetails.mbaSpecialization)
+                        ?.interviewLine
+                    }
                   </div>
                 </div>
               )}
@@ -1156,15 +1256,19 @@ const VoiceInterview = () => {
                 <label className="block mb-2 text-gray-300">Focus Area</label>
                 <select
                   value={interviewDetails.focusArea}
-                  onChange={(e) => handleDetailChange("focusArea", e.target.value)}
+                  onChange={(e) =>
+                    handleDetailChange("focusArea", e.target.value)
+                  }
                   className="w-full p-3 bg-gray-700 rounded border border-gray-600 focus:border-blue-500 focus:outline-none"
                 >
                   {interviewDetails.track === "mba" ? (
-                    getMbaFocusAreas(interviewDetails.mbaSpecialization).map((fa) => (
-                      <option key={fa} value={fa}>
-                        {fa}
-                      </option>
-                    ))
+                    getMbaFocusAreas(interviewDetails.mbaSpecialization).map(
+                      (fa) => (
+                        <option key={fa} value={fa}>
+                          {fa}
+                        </option>
+                      ),
+                    )
                   ) : (
                     <>
                       <option value="technical">Technical</option>
@@ -1217,16 +1321,21 @@ const VoiceInterview = () => {
 
               {recordedUrl && (
                 <div className="mt-3">
-                  <div className="text-gray-300 text-sm mb-1">Last recording (playback):</div>
+                  <div className="text-gray-300 text-sm mb-1">
+                    Last recording (playback):
+                  </div>
                   <audio controls src={recordedUrl} className="w-full" />
                 </div>
               )}
 
               {permissionError && (
-                <div className="text-red-300 text-sm mt-2">{permissionError}</div>
+                <div className="text-red-300 text-sm mt-2">
+                  {permissionError}
+                </div>
               )}
               <p className="text-gray-400 text-sm mt-2">
-                Optional: If your browser supports it, you can use speech-to-text during the interview.
+                Optional: If your browser supports it, you can use
+                speech-to-text during the interview.
               </p>
             </div>
 
@@ -1252,7 +1361,9 @@ const VoiceInterview = () => {
             </div>
 
             <div className="bg-gray-700 p-4 rounded mb-6 min-h-24 border border-gray-600">
-              <p className="text-lg">{getQuestionText(questions[currentQuestionIndex])}</p>
+              <p className="text-lg">
+                {getQuestionText(questions[currentQuestionIndex])}
+              </p>
             </div>
 
             {(() => {
@@ -1268,13 +1379,16 @@ const VoiceInterview = () => {
                     onClick={() => setShowIdealAnswer((s) => !s)}
                     className="text-sm px-3 py-2 rounded bg-gray-700 border border-gray-600 hover:bg-gray-600 transition"
                   >
-                    {showIdealAnswer ? "Hide" : "Show"} Reference Answer (with GFG links)
+                    {showIdealAnswer ? "Hide" : "Show"} Reference Answer (with
+                    GFG links)
                   </button>
                   {showIdealAnswer && (
                     <div className="mt-3 bg-gray-700 p-4 rounded border border-gray-600">
                       {refs.length > 0 && (
                         <div className="mb-3 text-sm text-gray-200">
-                          <div className="font-semibold mb-1">References (Options)</div>
+                          <div className="font-semibold mb-1">
+                            References (Options)
+                          </div>
                           <div className="flex flex-wrap gap-3">
                             {refs.slice(0, 2).map((r, idx) => (
                               <a
@@ -1290,7 +1404,9 @@ const VoiceInterview = () => {
                           </div>
                         </div>
                       )}
-                      <div className="text-sm text-gray-100 whitespace-pre-wrap">{ideal}</div>
+                      <div className="text-sm text-gray-100 whitespace-pre-wrap">
+                        {ideal}
+                      </div>
                     </div>
                   )}
                 </div>
@@ -1299,7 +1415,11 @@ const VoiceInterview = () => {
 
             <div className="mb-4 flex gap-3">
               <button
-                onClick={() => speakQuestion(getQuestionText(questions[currentQuestionIndex]))}
+                onClick={() =>
+                  speakQuestion(
+                    getQuestionText(questions[currentQuestionIndex]),
+                  )
+                }
                 className="bg-gray-600 px-4 py-2 rounded hover:bg-gray-500 transition-colors"
               >
                 {isSpeaking ? "Speaking..." : "Speak Question"}
@@ -1334,7 +1454,9 @@ const VoiceInterview = () => {
 
             {recordedUrl && (
               <div className="mb-4 bg-gray-700 p-3 rounded border border-gray-600">
-                <div className="text-gray-300 text-sm mb-1">Last recording (playback):</div>
+                <div className="text-gray-300 text-sm mb-1">
+                  Last recording (playback):
+                </div>
                 <audio controls src={recordedUrl} className="w-full" />
               </div>
             )}
@@ -1343,8 +1465,12 @@ const VoiceInterview = () => {
               <div className="mb-4 bg-gray-700 p-4 rounded border border-purple-500/40">
                 <div className="flex items-center justify-between gap-3 mb-3">
                   <div>
-                    <div className="text-purple-300 font-semibold">Answer Structure</div>
-                    <div className="text-gray-300 text-xs">{answerStructure.title}</div>
+                    <div className="text-purple-300 font-semibold">
+                      Answer Structure
+                    </div>
+                    <div className="text-gray-300 text-xs">
+                      {answerStructure.title}
+                    </div>
                   </div>
 
                   <div className="flex gap-2">
@@ -1355,9 +1481,10 @@ const VoiceInterview = () => {
                         if (!template.trim()) return;
 
                         setCurrentAnswer((prev) => {
-                          const next = prev && String(prev).trim().length
-                            ? `${prev}\n\n${template}`
-                            : template;
+                          const next =
+                            prev && String(prev).trim().length
+                              ? `${prev}\n\n${template}`
+                              : template;
                           sttSessionRef.current.final = next;
                           sttSessionRef.current.interim = "";
                           return next;
@@ -1369,7 +1496,11 @@ const VoiceInterview = () => {
                     </button>
                     <button
                       type="button"
-                      onClick={() => speakText(`${answerStructure.title}. ${answerStructure.template}`)}
+                      onClick={() =>
+                        speakText(
+                          `${answerStructure.title}. ${answerStructure.template}`,
+                        )
+                      }
                       className="bg-purple-600 px-3 py-2 rounded hover:bg-purple-500 transition-colors text-sm"
                     >
                       Speak
@@ -1394,7 +1525,9 @@ const VoiceInterview = () => {
               <div className="mb-4 bg-gray-700 p-4 rounded border border-blue-500/40">
                 <div className="flex items-center justify-between gap-3 mb-3">
                   <div>
-                    <div className="text-blue-300 font-semibold">Instant Help</div>
+                    <div className="text-blue-300 font-semibold">
+                      Instant Help
+                    </div>
                     <div className="text-gray-300 text-xs">
                       Approach + sample answer (auto-filled below)
                     </div>
@@ -1405,7 +1538,7 @@ const VoiceInterview = () => {
                       type="button"
                       onClick={() =>
                         speakText(
-                          `${assistantHelp.spokenText} Here's a sample answer. ${assistantHelp.sampleAnswer}`
+                          `${assistantHelp.spokenText} Here's a sample answer. ${assistantHelp.sampleAnswer}`,
                         )
                       }
                       className="bg-blue-600 px-3 py-2 rounded hover:bg-blue-500 transition-colors text-sm"
@@ -1430,7 +1563,9 @@ const VoiceInterview = () => {
                 </div>
 
                 <div>
-                  <div className="text-gray-300 text-sm mb-1">Sample Answer</div>
+                  <div className="text-gray-300 text-sm mb-1">
+                    Sample Answer
+                  </div>
                   <pre className="whitespace-pre-wrap font-sans text-gray-100 text-sm bg-gray-800/50 p-3 rounded border border-gray-600">
                     {assistantHelp.sampleAnswer}
                   </pre>
@@ -1442,9 +1577,12 @@ const VoiceInterview = () => {
               <div className="mb-4 bg-gray-700 p-4 rounded border border-green-500/40">
                 <div className="flex items-center justify-between gap-3 mb-3">
                   <div>
-                    <div className="text-green-300 font-semibold">Answer Check</div>
+                    <div className="text-green-300 font-semibold">
+                      Answer Check
+                    </div>
                     <div className="text-gray-300 text-xs">
-                      {answerCheck.source === "ai" ? "AI" : "Coach"} feedback for your answer
+                      {answerCheck.source === "ai" ? "AI" : "Coach"} feedback
+                      for your answer
                     </div>
                   </div>
 
@@ -1482,13 +1620,17 @@ const VoiceInterview = () => {
                       Verdict: {String(answerCheck.verdict)}
                     </span>
                     {typeof answerCheck?.score === "number" && (
-                      <span className="ml-2 text-gray-200 text-xs">Score: {answerCheck.score}/10</span>
+                      <span className="ml-2 text-gray-200 text-xs">
+                        Score: {answerCheck.score}/10
+                      </span>
                     )}
                   </div>
                 )}
 
                 {answerCheck?.warning && (
-                  <div className="text-yellow-200 text-xs mb-2">{String(answerCheck.warning)}</div>
+                  <div className="text-yellow-200 text-xs mb-2">
+                    {String(answerCheck.warning)}
+                  </div>
                 )}
 
                 {answerCheck?.encouragement && (
@@ -1497,63 +1639,82 @@ const VoiceInterview = () => {
                   </div>
                 )}
 
-                {Array.isArray(answerCheck?.resources) && answerCheck.resources.length > 0 && (
-                  <div className="mb-4">
-                    <div className="text-gray-200 text-sm mb-1">Recommended sources</div>
-                    <div className="flex flex-wrap gap-3 text-sm">
-                      {answerCheck.resources.slice(0, 3).map((r, idx) => (
-                        <a
-                          key={`res-${idx}-${r?.url || ""}`}
-                          href={String(r?.url || "#")}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="underline text-blue-300 hover:text-blue-200"
-                        >
-                          {String(r?.label || `Source ${idx + 1}`)}
-                        </a>
-                      ))}
+                {Array.isArray(answerCheck?.resources) &&
+                  answerCheck.resources.length > 0 && (
+                    <div className="mb-4">
+                      <div className="text-gray-200 text-sm mb-1">
+                        Recommended sources
+                      </div>
+                      <div className="flex flex-wrap gap-3 text-sm">
+                        {answerCheck.resources.slice(0, 3).map((r, idx) => (
+                          <a
+                            key={`res-${idx}-${r?.url || ""}`}
+                            href={String(r?.url || "#")}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="underline text-blue-300 hover:text-blue-200"
+                          >
+                            {String(r?.label || `Source ${idx + 1}`)}
+                          </a>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
-                {(Array.isArray(answerCheck?.good) || Array.isArray(answerCheck?.improve)) && (
+                {(Array.isArray(answerCheck?.good) ||
+                  Array.isArray(answerCheck?.improve)) && (
                   <div className="space-y-3">
-                    {Array.isArray(answerCheck?.good) && answerCheck.good.length > 0 && (
-                      <div>
-                        <div className="text-gray-200 text-sm mb-1">What’s good</div>
-                        <ul className="text-gray-100 text-sm list-disc pl-5 space-y-1">
-                          {answerCheck.good.slice(0, 3).map((item, idx) => (
-                            <li key={`good-${idx}`}>{String(item)}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
+                    {Array.isArray(answerCheck?.good) &&
+                      answerCheck.good.length > 0 && (
+                        <div>
+                          <div className="text-gray-200 text-sm mb-1">
+                            What’s good
+                          </div>
+                          <ul className="text-gray-100 text-sm list-disc pl-5 space-y-1">
+                            {answerCheck.good.slice(0, 3).map((item, idx) => (
+                              <li key={`good-${idx}`}>{String(item)}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
 
-                    {Array.isArray(answerCheck?.improve) && answerCheck.improve.length > 0 && (
-                      <div>
-                        <div className="text-gray-200 text-sm mb-1">What to improve</div>
-                        <ul className="text-gray-100 text-sm list-disc pl-5 space-y-1">
-                          {answerCheck.improve.slice(0, 3).map((item, idx) => (
-                            <li key={`imp-${idx}`}>{String(item)}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
+                    {Array.isArray(answerCheck?.improve) &&
+                      answerCheck.improve.length > 0 && (
+                        <div>
+                          <div className="text-gray-200 text-sm mb-1">
+                            What to improve
+                          </div>
+                          <ul className="text-gray-100 text-sm list-disc pl-5 space-y-1">
+                            {answerCheck.improve
+                              .slice(0, 3)
+                              .map((item, idx) => (
+                                <li key={`imp-${idx}`}>{String(item)}</li>
+                              ))}
+                          </ul>
+                        </div>
+                      )}
 
-                    {Array.isArray(answerCheck?.keyMissing) && answerCheck.keyMissing.length > 0 && (
-                      <div>
-                        <div className="text-gray-200 text-sm mb-1">Key missing points</div>
-                        <ul className="text-gray-100 text-sm list-disc pl-5 space-y-1">
-                          {answerCheck.keyMissing.slice(0, 2).map((item, idx) => (
-                            <li key={`miss-${idx}`}>{String(item)}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
+                    {Array.isArray(answerCheck?.keyMissing) &&
+                      answerCheck.keyMissing.length > 0 && (
+                        <div>
+                          <div className="text-gray-200 text-sm mb-1">
+                            Key missing points
+                          </div>
+                          <ul className="text-gray-100 text-sm list-disc pl-5 space-y-1">
+                            {answerCheck.keyMissing
+                              .slice(0, 2)
+                              .map((item, idx) => (
+                                <li key={`miss-${idx}`}>{String(item)}</li>
+                              ))}
+                          </ul>
+                        </div>
+                      )}
 
                     {answerCheck?.improvedAnswer && (
                       <div>
-                        <div className="text-gray-200 text-sm mb-1">Suggested improved answer</div>
+                        <div className="text-gray-200 text-sm mb-1">
+                          Suggested improved answer
+                        </div>
                         <pre className="whitespace-pre-wrap font-sans text-gray-100 text-sm bg-gray-800/50 p-3 rounded border border-gray-600">
                           {String(answerCheck.improvedAnswer)}
                         </pre>
@@ -1562,17 +1723,21 @@ const VoiceInterview = () => {
 
                     {answerCheck?.oneLinerTip && (
                       <div className="text-gray-200 text-sm">
-                        <span className="text-gray-300">One-liner tip:</span> {String(answerCheck.oneLinerTip)}
+                        <span className="text-gray-300">One-liner tip:</span>{" "}
+                        {String(answerCheck.oneLinerTip)}
                       </div>
                     )}
                   </div>
                 )}
 
-                {!Array.isArray(answerCheck?.good) && !Array.isArray(answerCheck?.improve) && (
-                  <pre className="whitespace-pre-wrap font-sans text-gray-100 text-sm bg-gray-800/50 p-3 rounded border border-gray-600">
-                    {isChecking ? "Checking your answer..." : answerCheck.feedback}
-                  </pre>
-                )}
+                {!Array.isArray(answerCheck?.good) &&
+                  !Array.isArray(answerCheck?.improve) && (
+                    <pre className="whitespace-pre-wrap font-sans text-gray-100 text-sm bg-gray-800/50 p-3 rounded border border-gray-600">
+                      {isChecking
+                        ? "Checking your answer..."
+                        : answerCheck.feedback}
+                    </pre>
+                  )}
 
                 <div className="text-gray-300 text-xs mt-2">
                   Tip: Click Submit Answer once to check, and again to continue.
@@ -1630,7 +1795,9 @@ const VoiceInterview = () => {
 
         {interviewStage === "feedback" && (
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
-            <h1 className="text-2xl font-bold mb-6 text-center">Interview Feedback</h1>
+            <h1 className="text-2xl font-bold mb-6 text-center">
+              Interview Feedback
+            </h1>
 
             <div className="bg-gray-700 p-4 rounded mb-6 border border-gray-600">
               <pre className="whitespace-pre-wrap font-sans">{feedback}</pre>
